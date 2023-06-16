@@ -25,20 +25,52 @@ class SignInScreen extends StatelessWidget {
                   top: Radius.circular(45),
                 ),
               ),
-              child: const Column(
-                children:  [
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
                   //email
-                  CustomTextField(
-                    icon: Icons.email, 
+                  const CustomTextField(
+                    icon: Icons.email,
                     label: 'Email',
                   ),
 
                   // senha
-                  CustomTextField(
-                    icon: Icons.lock, 
+                  const CustomTextField(
+                    icon: Icons.lock,
                     label: 'Senha',
                     isPasswordField: true,
-                  )
+                  ),
+
+                  SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        )),
+                        onPressed: () => {},
+                        child: const Text(
+                          "Entrar",
+                          style: TextStyle(fontSize: 18),
+                        )),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => {},
+                        child: const Text(
+                          'Esqueceu a senha?',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+
+
+
                 ],
               ),
             ),
