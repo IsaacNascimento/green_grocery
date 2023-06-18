@@ -1,8 +1,21 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/auth/components/custom_text_field.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  
+  final List<FadeAnimatedText> textosAnimados = [
+    FadeAnimatedText('Frutas'),
+    FadeAnimatedText('Verduras'),
+    FadeAnimatedText('Legumes'),
+    FadeAnimatedText('Carnes'),
+    FadeAnimatedText('Cereais'),
+    FadeAnimatedText('Laticíneos'),
+  ];
+
+  SignInScreen(
+    {Key? key}) : super(key: key
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +24,47 @@ class SignInScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Container(color: Colors.red),
-          ),
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Nome do app
+              const Text.rich(
+                TextSpan(
+                  style: TextStyle(
+                    fontSize: 40,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'Green',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                        text: 'grocer',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ))
+                  ],
+                ),
+              ),
+
+              // Categorias
+              SizedBox(
+                height: 30,
+                child: DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 25,
+                  ),
+                  child: AnimatedTextKit(
+                    repeatForever: true,
+                    animatedTexts: textosAnimados
+                  ),
+                ),
+              ),
+            ],
+          )),
+
+          // Formulario
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 32,
@@ -27,13 +79,13 @@ class SignInScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                //email
+                // Email
                 const CustomTextField(
                   icon: Icons.email,
                   label: 'Email',
                 ),
 
-                // senha
+                // Senha
                 const CustomTextField(
                   icon: Icons.lock,
                   label: 'Senha',
