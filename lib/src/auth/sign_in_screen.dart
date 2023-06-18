@@ -56,6 +56,7 @@ class SignInScreen extends StatelessWidget {
                     fontSize: 25,
                   ),
                   child: AnimatedTextKit(
+                    pause: Duration.zero,
                     repeatForever: true,
                     animatedTexts: textosAnimados
                   ),
