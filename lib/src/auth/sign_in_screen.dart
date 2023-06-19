@@ -1,6 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/auth/components/custom_text_field.dart';
+import 'package:green_grocer/src/auth/sign_up_screen.dart';
+import 'package:green_grocer/src/config/custom_colors.dart';
 
 class SignInScreen extends StatelessWidget {
   
@@ -22,7 +24,7 @@ class SignInScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: CustomColors.customSwatchColor,
       body: SingleChildScrollView(
         child: SizedBox(
           height: size.height,
@@ -34,13 +36,13 @@ class SignInScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Nome do app
-                  const Text.rich(
+                  Text.rich(
                     TextSpan(
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 40,
                       ),
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: 'Green',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
@@ -48,7 +50,7 @@ class SignInScreen extends StatelessWidget {
                         TextSpan(
                             text: 'grocer',
                             style: TextStyle(
-                              color: Colors.red,
+                              color: CustomColors.customContrastColor,
                             ))
                       ],
                     ),
@@ -121,9 +123,9 @@ class SignInScreen extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () => {},
-                          child: const Text(
+                          child: Text(
                             'Esqueceu a senha?',
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(color: CustomColors.customContrastColor),
                           ),
                         ),
                       ),
@@ -165,7 +167,13 @@ class SignInScreen extends StatelessWidget {
                               width: 2,
                               color: Colors.green,
                             )),
-                        onPressed: () => {},
+                        onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (c) {
+                              return const SignUpScreen();
+                            }),
+                          )
+                        },
                         child: const Text(
                           'Criar Conta',
                           style: TextStyle(fontSize: 18),
