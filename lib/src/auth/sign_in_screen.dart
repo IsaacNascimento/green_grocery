@@ -2,10 +2,10 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/auth/components/custom_text_field.dart';
 import 'package:green_grocer/src/auth/sign_up_screen.dart';
+import 'package:green_grocer/src/base/base_screen.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 
 class SignInScreen extends StatelessWidget {
-  
   final List<FadeAnimatedText> textosAnimados = [
     FadeAnimatedText('Frutas'),
     FadeAnimatedText('Verduras'),
@@ -15,9 +15,7 @@ class SignInScreen extends StatelessWidget {
     FadeAnimatedText('Laticíneos'),
   ];
 
-  SignInScreen(
-    {Key? key}) : super(key: key
-  );
+  SignInScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +53,7 @@ class SignInScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-              
+
                   // Categorias
                   SizedBox(
                     height: 30,
@@ -64,15 +62,14 @@ class SignInScreen extends StatelessWidget {
                         fontSize: 25,
                       ),
                       child: AnimatedTextKit(
-                        pause: Duration.zero,
-                        repeatForever: true,
-                        animatedTexts: textosAnimados
-                      ),
+                          pause: Duration.zero,
+                          repeatForever: true,
+                          animatedTexts: textosAnimados),
                     ),
                   ),
                 ],
               )),
-              
+
               // Formulario
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -93,14 +90,14 @@ class SignInScreen extends StatelessWidget {
                       icon: Icons.email,
                       label: 'Email',
                     ),
-              
+
                     // Senha
                     const CustomTextField(
                       icon: Icons.lock,
                       label: 'Senha',
                       isPasswordField: true,
                     ),
-                      
+
                     // Botão Entrar
                     SizedBox(
                       height: 50,
@@ -109,13 +106,21 @@ class SignInScreen extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           )),
-                          onPressed: () => {},
+                          onPressed: () => {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (c) {
+                                      return const BaseScreen();
+                                    },
+                                  ),
+                                ),
+                              },
                           child: const Text(
                             "Entrar",
                             style: TextStyle(fontSize: 18),
                           )),
                     ),
-              
+
                     // Botão Esqueceu a senha
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -125,12 +130,13 @@ class SignInScreen extends StatelessWidget {
                           onPressed: () => {},
                           child: Text(
                             'Esqueceu a senha?',
-                            style: TextStyle(color: CustomColors.customContrastColor),
+                            style: TextStyle(
+                                color: CustomColors.customContrastColor),
                           ),
                         ),
                       ),
                     ),
-              
+
                     // Divisor
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
@@ -155,7 +161,7 @@ class SignInScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-              
+
                     // Botão de novo usuário
                     SizedBox(
                       height: 50,
