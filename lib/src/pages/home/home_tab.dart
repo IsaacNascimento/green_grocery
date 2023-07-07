@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/pages/home/components/category_tile.dart';
-import 'package:green_grocer/src/config/app_data.dart' as appData;
+import 'package:green_grocer/src/config/app_data.dart' as app_data;
+import 'package:green_grocer/src/pages/home/components/item_tile.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -108,16 +109,16 @@ class _HomeTabState extends State<HomeTab> {
                     onPressed: () {
                       setState(
                         () {
-                          selectedCategory = appData.categories[index];
+                          selectedCategory = app_data.categories[index];
                         },
                       );
                     },
-                    category: appData.categories[index],
-                    isSelected: appData.categories[index] == selectedCategory,
+                    category: app_data.categories[index],
+                    isSelected: app_data.categories[index] == selectedCategory,
                   );
                 },
                 separatorBuilder: (_, index) => const SizedBox(width: 10),
-                itemCount: appData.categories.length,
+                itemCount: app_data.categories.length,
               ),
             ),
           ),
@@ -128,15 +129,14 @@ class _HomeTabState extends State<HomeTab> {
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 9 / 11.5
-              ),
-              itemCount: appData.items.length,
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 9 / 11.5),
+              itemCount: app_data.items.length,
               itemBuilder: (_, index) {
-                return Container(
-                  color: Colors.red,
+                return ItemTile(
+                  item: app_data.items[index],
                 );
               },
             ),
