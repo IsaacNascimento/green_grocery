@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:green_grocer/src/config/app_data.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
-import 'package:green_grocer/src/home/components/category_tile.dart';
+import 'package:green_grocer/src/pages/home/components/category_tile.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -10,14 +11,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  List<String> categories = [
-    'Frutas',
-    'Grãos',
-    'Verduras',
-    'Temperos',
-    'Cereais'
-  ];
-
   String selectedCategory = 'Frutas';
 
   @override
@@ -33,10 +26,11 @@ class _HomeTabState extends State<HomeTab> {
             style: const TextStyle(fontSize: 30),
             children: [
               TextSpan(
-                  text: 'Green',
-                  style: TextStyle(
-                    color: CustomColors.customSwatchColor,
-                  )),
+                text: 'Green',
+                style: TextStyle(
+                  color: CustomColors.customSwatchColor,
+                ),
+              ),
               TextSpan(
                   text: 'grocer',
                   style: TextStyle(color: CustomColors.customContrastColor)),
@@ -70,6 +64,7 @@ class _HomeTabState extends State<HomeTab> {
         ],
       ),
 
+      // Conteúdo
       body: Column(
         children: [
           // Campo de pesquisa
@@ -77,25 +72,27 @@ class _HomeTabState extends State<HomeTab> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: TextFormField(
               decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  isDense: true,
-                  hintText: 'Pesquise aqui...',
-                  hintStyle: TextStyle(
-                    color: Colors.grey.shade400,
-                    fontSize: 14,
+                filled: true,
+                fillColor: Colors.white,
+                isDense: true,
+                hintText: 'Pesquise aqui...',
+                hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 14,
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: CustomColors.customContrastColor,
+                  size: 21,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(60),
+                  borderSide: const BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
                   ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: CustomColors.customContrastColor,
-                    size: 21,
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60),
-                      borderSide: const BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
-                      ))),
+                ),
+              ),
             ),
           ),
 
@@ -110,8 +107,9 @@ class _HomeTabState extends State<HomeTab> {
                   return CategoryTile(
                     onPressed: () {
                       setState(() {
-                        selectedCategory = categories[index];
-                      });
+                          selectedCategory = categories[index];
+                        },
+                      );
                     },
                     category: categories[index],
                     isSelected: categories[index] == selectedCategory,
@@ -124,6 +122,8 @@ class _HomeTabState extends State<HomeTab> {
           ),
 
           // Grid
+          
+          
         ],
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:green_grocer/src/home/home_tab.dart';
+import 'package:green_grocer/src/pages/home/home_tab.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});
