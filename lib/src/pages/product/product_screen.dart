@@ -20,69 +20,72 @@ class ProductScreen extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-                padding: const EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(50),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade600,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(50),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Nome - Quantidade
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            item.itemName,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: const TextStyle(
-                                fontSize: 27, fontWeight: FontWeight.bold),
-                          ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade600,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Nome - Quantidade
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.itemName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontSize: 27, fontWeight: FontWeight.bold),
                         ),
-                        Container(
-                          height: 30,
-                          width: 70,
-                          color: Colors.red,
-                        ),
-                      ],
+                      ),
+                      Container(
+                        height: 30,
+                        width: 70,
+                        color: Colors.red,
+                      ),
+                    ],
+                  ),
+
+                  // Preço
+                  Text(
+                    utilsServices.priceToCurrency(item.price),
+                    style: TextStyle(
+                      fontSize: 23,
+                      color: CustomColors.customSwatchColor,
                     ),
+                  ),
 
-                    // Preço
-                    Text(utilsServices.priceToCurrency(item.price),
-                        style: TextStyle(
-                          fontSize: 23,
-                          color: CustomColors.customSwatchColor,
-                        )),
-
-                    // Descrição
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: SingleChildScrollView(
-                          child: Text(
-                            item.description,
-                            style: const TextStyle(height: 1.5),
-                          ),
+                  // Descrição
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          item.description,
+                          style: const TextStyle(height: 1.5),
                         ),
                       ),
                     ),
+                  ),
 
-                    // Botão
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Botão'),
-                    ),
-                  ],
-                )),
+                  // Botão
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Botão'),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
