@@ -8,8 +8,8 @@ class QuantityWidget extends StatelessWidget {
 
   const QuantityWidget({
     super.key,
-    required this.value,
     required this.suffixText,
+    required this.value,
     required this.result,
   });
 
@@ -29,6 +29,7 @@ class QuantityWidget extends StatelessWidget {
         ],
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           _QuantityButton(
             icon: Icons.remove,
