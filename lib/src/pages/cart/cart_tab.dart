@@ -27,7 +27,7 @@ class _CartTabState extends State<CartTab> {
     double totalPrice = 0;
 
     for (var i = 0; i < cartItemLenght; i++) {
-        totalPrice += cartItemModel[i].totalPrice();
+      totalPrice += cartItemModel[i].totalPrice();
     }
 
     return totalPrice;
@@ -94,7 +94,10 @@ class _CartTabState extends State<CartTab> {
                         borderRadius: BorderRadius.circular(18),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      bool? result = await showOrderConfirmation();
+                      print(result);
+                    },
                     child: const Text(
                       'Concluir Pedido',
                       style: TextStyle(fontSize: 18),
@@ -107,5 +110,38 @@ class _CartTabState extends State<CartTab> {
         ],
       ),
     );
+  }
+
+  Future<bool?> showOrderConfirmation() {
+    return showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: const Text('Confirmação'),
+            content: const Text('Desejar realmente concluir o Pedido?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text('Não'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Sim'),
+              ),
+            ],
+          );
+        });
   }
 }
