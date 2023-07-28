@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/app_data.dart' as app_data;
+import 'package:green_grocer/src/pages/orders/components/order_tile.dart';
 
 class OrdersTab extends StatelessWidget {
   const OrdersTab({super.key});
@@ -19,7 +20,9 @@ class OrdersTab extends StatelessWidget {
           );
         },
         itemBuilder: (_, index) {
-          return Text(app_data.orders[index].id);
+          return OrderTile(
+            order: app_data.orders[index],
+          );
         },
         itemCount: app_data.orders.length,
       ),
