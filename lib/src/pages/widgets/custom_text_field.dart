@@ -1,27 +1,29 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 
-
 class CustomTextField extends StatefulWidget {
   final IconData icon;
   final String label;
   final bool isPasswordField;
   final List<TextInputFormatter>? inputFormatters;
+  final String? initialValue;
+  final bool readOnly;
 
   const CustomTextField({
-    Key? key, 
+    Key? key,
     required this.icon,
     required this.label,
     this.isPasswordField = false,
     this.inputFormatters,
-    }) : super(key: key);
+    this.initialValue,
+    this.readOnly = false,
+  }) : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-
   bool isObscureText = false;
 
   @override
@@ -36,23 +38,30 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: TextFormField(
+        readOnly: widget.readOnly,
+        initialValue: widget.initialValue,
+
         inputFormatters: widget.inputFormatters,
         obscureText: isObscureText,
         decoration: InputDecoration(
-            suffixIcon: widget.isPasswordField ? IconButton(
-              onPressed: () => {
-                setState(() {
-                  isObscureText = !isObscureText;
-                })
-              },
-              icon: Icon(isObscureText ? Icons.visibility : Icons.visibility_off),
-            ) : null, 
-            prefixIcon: Icon(widget.icon),
-            labelText: widget.label,
-            isDense: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(18),
-            )),
+          suffixIcon: widget.isPasswordField
+              ? IconButton(
+                  onPressed: () => {
+                    setState(() {
+                      isObscureText = !isObscureText;
+                    })
+                  },
+                  icon: Icon(
+                      isObscureText ? Icons.visibility : Icons.visibility_off),
+                )
+              : null,
+          prefixIcon: Icon(widget.icon),
+          labelText: widget.label,
+          isDense: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+        ),
       ),
     );
   }
