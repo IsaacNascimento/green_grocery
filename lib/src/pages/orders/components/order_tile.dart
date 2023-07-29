@@ -20,6 +20,7 @@ class OrderTile extends StatelessWidget {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
+          initiallyExpanded: order.status == 'pending_payment',
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -32,30 +33,32 @@ class OrderTile extends StatelessWidget {
           ),
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           children: [
-            SizedBox(
-              height: 150,
+            IntrinsicHeight(
               child: Row(
                 children: [
                   // Lista De Produtos
                   Expanded(
                     flex: 3,
-                    child: ListView(
-                      children: order.items.map((orderedItem) {
-                        return _OrderItemWidget(
-                          utilsServices: utilsServices,
-                          orderedItem: orderedItem,
-                        );
-                      }).toList(),
+                    child: SizedBox(
+                      height: 150,
+                      child: ListView(
+                        children: order.items.map((orderedItem) {
+                          return _OrderItemWidget(
+                            utilsServices: utilsServices,
+                            orderedItem: orderedItem,
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
-
+            
                   // Divisão
                   VerticalDivider(
                     color: Colors.grey.shade300,
                     thickness: 2,
                     width: 8,
                   ),
-
+            
                   // Status do Pedido
                   Expanded(
                     flex: 2,
