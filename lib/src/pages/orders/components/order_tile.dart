@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/models/cart_item_model.dart';
 import 'package:green_grocer/src/models/order_item_model.dart';
+import 'package:green_grocer/src/pages/orders/components/order_status_widget.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class OrderTile extends StatelessWidget {
@@ -35,6 +36,7 @@ class OrderTile extends StatelessWidget {
               height: 150,
               child: Row(
                 children: [
+                  // Lista De Produtos
                   Expanded(
                     flex: 3,
                     child: ListView(
@@ -46,10 +48,22 @@ class OrderTile extends StatelessWidget {
                       }).toList(),
                     ),
                   ),
+
+                  // Divisão
+                  VerticalDivider(
+                    color: Colors.grey.shade300,
+                    thickness: 2,
+                    width: 8,
+                  ),
+
+                  // Status do Pedido
                   Expanded(
                     flex: 2,
-                    child: Container(
-                      color: Colors.blue,
+                    child: OrderStatusWidget(
+                      status: order.status,
+                      isOverdue: order.overdueDateTime.isBefore(
+                        DateTime.now(),
+                      ),
                     ),
                   ),
                 ],
