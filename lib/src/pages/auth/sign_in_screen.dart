@@ -1,10 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/instance_manager.dart';
 import 'package:green_grocer/src/pages/widgets/app_name_widget.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';
-import 'package:green_grocer/src/pages/auth/sign_up_screen.dart';
-import 'package:green_grocer/src/pages/base/base_screen.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
+import 'package:green_grocer/src/routes/app_pages.dart';
 
 class SignInScreen extends StatelessWidget {
   final List<FadeAnimatedText> textosAnimados = [
@@ -91,15 +92,8 @@ class SignInScreen extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           )),
-                          onPressed: () => {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (c) {
-                                      return const BaseScreen();
-                                    },
-                                  ),
-                                ),
-                              },
+                          onPressed: () =>
+                              {Get.offNamed(PagesRoutes.baseRoute)},
                           child: const Text(
                             "Entrar",
                             style: TextStyle(fontSize: 18),
@@ -158,13 +152,7 @@ class SignInScreen extends StatelessWidget {
                               width: 2,
                               color: Colors.green,
                             )),
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (c) {
-                              return SignUpScreen();
-                            }),
-                          )
-                        },
+                        onPressed: () => {Get.toNamed(PagesRoutes.signUpRoute)},
                         child: const Text(
                           'Criar Conta',
                           style: TextStyle(fontSize: 18),
