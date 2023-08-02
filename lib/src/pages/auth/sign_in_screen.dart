@@ -1,7 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/utils.dart';
+import 'package:get/get.dart';
+import 'package:green_grocer/src/models/user_model.dart';
+import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 import 'package:green_grocer/src/pages/widgets/app_name_widget.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
@@ -23,6 +24,8 @@ class SignInScreen extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final AuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -113,23 +116,39 @@ class SignInScreen extends StatelessWidget {
 
                       // Botão Entrar
                       SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            )),
-                            onPressed: () => {
-                                  if (_formKey.currentState!.validate())
-                                    {
-                                      Get.offNamed(PagesRoutes.baseRoute),
-                                    }
-                                },
-                            child: const Text(
-                              "Entrar",
-                              style: TextStyle(fontSize: 18),
-                            )),
-                      ),
+                          height: 50,
+                          child: GetX<AuthController>(
+                            builder: (authController) {
+                              return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                )),
+                                onPressed: authController.isFetching.value
+                                    ? null
+                                    : () {
+                                        FocusScope.of(context).unfocus();
+                                        if (_formKey.currentState!.validate()) {
+                                          String email = emailController.text;
+                                          String password =
+                                              passwordController.text;
+                                          final UserModel user = UserModel(
+                                              email: email, password: password);
+                                          authController.signIn(user);
+                                          // Get.offNamed(PagesRoutes.baseRoute);
+                                        }
+                                      },
+                                child: authController.isFetching.value
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        "Entrar",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                              );
+                            },
+                          )),
 
                       // Botão Esqueceu a senha
                       Padding(

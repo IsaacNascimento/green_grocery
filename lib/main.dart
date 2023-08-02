@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
+import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 import 'package:green_grocer/src/routes/app_pages.dart';
 
 void main() {
+  Get.lazyPut(() => AuthController());
   runApp(const MyApp());
 }
 
