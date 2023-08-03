@@ -16,7 +16,7 @@ class AuthRepository {
     );
 
     if (result['result'] != null) {
-      final user = UserModel.fromMap(result['result']);
+      final user = UserModel.fromJson(result['result']);
       print(user);
       return user;
     } else {

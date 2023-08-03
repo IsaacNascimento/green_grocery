@@ -1,7 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user_model.g.dart';
+
+// to generate MapToJsom: Run => flutter pub run build_runner build
+
+@JsonSerializable()
 class UserModel {
   String email;
-  String? password;
+
+  @JsonKey(name: 'fullname')
   String? name;
+
+  String? password;
   String? phone;
   String? cpf;
   String? id;
@@ -17,30 +28,13 @@ class UserModel {
     this.token,
   });
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      email: map['email'],
-      cpf: map['cpf'],
-      name: map['fullname'],
-      phone: map['phone'],
-      id: map['id'],
-      token: map['token'],
-    );
-  }
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
-  Map<String, dynamic> toMap() {
-    return {
-      'email': email,
-      'password': password,
-      'cpf': cpf,
-      'name': name,
-      'phone': phone,
-      'id': id,
-    };
-  }
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   @override
   String toString() {
-    return 'name: $name | cpf: $cpf';
+    return 'UserModel(email: $email, name: $name, password: $password, phone: $phone, cpf: $cpf, id: $id, token: $token)';
   }
 }
