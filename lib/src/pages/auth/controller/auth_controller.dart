@@ -10,7 +10,8 @@ class AuthController extends GetxController {
   Future<void> signIn(UserModel user) async {
     isFetching.value = true;
 
-    await authRepository.signIn(email: user.email, password: user.password);
+    await authRepository.signIn(
+        email: user.email, password: user.password ?? '');
 
     isFetching.value = false;
   }

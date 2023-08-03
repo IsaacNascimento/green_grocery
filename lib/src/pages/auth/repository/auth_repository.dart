@@ -1,4 +1,5 @@
 import 'package:green_grocer/src/constants/endpoints.dart';
+import 'package:green_grocer/src/models/user_model.dart';
 import 'package:green_grocer/src/services/http_manager.dart';
 
 class AuthRepository {
@@ -15,8 +16,9 @@ class AuthRepository {
     );
 
     if (result['result'] != null) {
-      print(result);
-      return result;
+      final user = UserModel.fromMap(result['result']);
+      print(user);
+      return user;
     } else {
       Map<String, dynamic> error = {
         "message": "Ocorreu algum error",
