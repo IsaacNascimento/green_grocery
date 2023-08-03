@@ -15,12 +15,14 @@ class AuthRepository {
     );
 
     if (result['result'] != null) {
+      print(result);
       return result;
     } else {
       Map<String, dynamic> error = {
         "message": "Ocorreu algum error",
-        "result": result,
+        "error": result,
       };
+      print(error);
       return error;
     }
   }
