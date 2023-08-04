@@ -1,12 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UtilsServices {
-
   String priceToCurrency(double price) {
     NumberFormat numberFormat = NumberFormat.simpleCurrency(locale: 'pt_BR');
     return numberFormat.format(price);
-    
   }
 
   String formatDateTime(DateTime dateTime) {
@@ -16,4 +16,15 @@ class UtilsServices {
     return dateFormat.format(dateTime);
   }
 
+  seeToast({required String message, bool isError = false}) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 3,
+      backgroundColor: isError ? Colors.red : Colors.white,
+      textColor: isError ? Colors.white : Colors.black,
+      fontSize: 16.0,
+    );
+  }
 }
