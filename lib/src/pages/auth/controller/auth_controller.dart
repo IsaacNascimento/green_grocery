@@ -13,6 +13,10 @@ class AuthController extends GetxController {
 
   UserModel user = UserModel(email: '');
 
+  Future<void> validateToken() async {
+    authRepository.validateToken('token');
+  }
+
   Future<void> signIn(UserModel user) async {
     isFetching.value = true;
 
