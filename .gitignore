@@ -45,3 +45,6 @@ app.*.map.json
 
 # Postman Collection
 **/assets/Greengrocer.postman_collection.json
+
+# Notes.txt
+notes.txt

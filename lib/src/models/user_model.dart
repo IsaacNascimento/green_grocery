@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
-// to generate MapToJsom: Run => flutter pub run build_runner build
+// to generate MapToJsom: Run => dart run build_runner build
 
 @JsonSerializable()
 class UserModel {
