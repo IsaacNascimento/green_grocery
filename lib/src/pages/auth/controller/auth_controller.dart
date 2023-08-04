@@ -24,7 +24,7 @@ class AuthController extends GetxController {
       },
       error: (message) {
         // print(message);
-        utilsServices.seeToast(message: message, isError: true);
+        utilsServices.showToast(message: message, isError: true);
       },
     );
   }

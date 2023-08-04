@@ -16,7 +16,7 @@ class UtilsServices {
     return dateFormat.format(dateTime);
   }
 
-  seeToast({required String message, bool isError = false}) {
+  void showToast({required String message, bool isError = false}) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
