@@ -7,6 +7,7 @@ import 'package:green_grocer/src/pages/widgets/app_name_widget.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/routes/app_pages.dart';
+import 'package:green_grocer/src/services/validators.dart';
 
 class SignInScreen extends StatelessWidget {
   final List<FadeAnimatedText> textosAnimados = [
@@ -86,13 +87,8 @@ class SignInScreen extends StatelessWidget {
                         icon: Icons.email,
                         label: 'Email',
                         controller: emailController,
-                        validator: (email) {
-                          if (email == null || email.isEmpty) {
-                            return 'Digite seu email!';
-                          }
-                          if (!email.isEmail) return 'Digite um email válido';
-                          return null;
-                        },
+                        keyboardType: TextInputType.emailAddress,
+                        validator: emailValidator,
                       ),
 
                       // Senha
@@ -101,54 +97,46 @@ class SignInScreen extends StatelessWidget {
                         label: 'Senha',
                         isPasswordField: true,
                         controller: passwordController,
-                        validator: (password) {
-                          if (password == null || password.isEmpty) {
-                            return 'Digite sua senha!';
-                          }
-
-                          if (password.length < 7) {
-                            return 'Digite uma senha com pelo menos 7 caracteres';
-                          }
-
-                          return null;
-                        },
+                        validator: passwordValidator,
                       ),
 
                       // Botão Entrar
                       SizedBox(
-                          height: 50,
-                          child: GetX<AuthController>(
-                            builder: (authController) {
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
+                        height: 50,
+                        child: GetX<AuthController>(
+                          builder: (authController) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18),
-                                )),
-                                onPressed: authController.isFetching.value
-                                    ? null
-                                    : () {
-                                        FocusScope.of(context).unfocus();
-                                        if (_formKey.currentState!.validate()) {
-                                          String email = emailController.text;
-                                          String password =
-                                              passwordController.text;
-                                          final UserModel user = UserModel(
-                                              email: email, password: password);
-                                          authController.signIn(user);
-                                          // Get.offNamed(PagesRoutes.baseRoute);
-                                        }
-                                      },
-                                child: authController.isFetching.value
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      )
-                                    : const Text(
-                                        "Entrar",
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                              );
-                            },
-                          )),
+                                ),
+                              ),
+                              onPressed: authController.isFetching.value
+                                  ? null
+                                  : () {
+                                      FocusScope.of(context).unfocus();
+                                      if (_formKey.currentState!.validate()) {
+                                        String email = emailController.text;
+                                        String password =
+                                            passwordController.text;
+                                        final UserModel user = UserModel(
+                                            email: email, password: password);
+                                        authController.signIn(user);
+                                        // Get.offNamed(PagesRoutes.baseRoute);
+                                      }
+                                    },
+                              child: authController.isFetching.value
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text(
+                                      "Entrar",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                            );
+                          },
+                        ),
+                      ),
 
                       // Botão Esqueceu a senha
                       Padding(

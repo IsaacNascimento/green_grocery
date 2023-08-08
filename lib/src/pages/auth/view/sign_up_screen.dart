@@ -3,20 +3,18 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:green_grocer/src/services/mask_formatters.dart';
+import 'package:green_grocer/src/services/validators.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
 
-  final cpfFormatter = MaskTextInputFormatter(
-    mask: '###.###.###-##',
-    filter: {'#': RegExp(r'[0-9]')},
-  );
-
-  final phoneFormatter = MaskTextInputFormatter(
-    mask: '(##) #####-####',
-    filter: {'#': RegExp(r'[0-9]')},
-  );
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final cpfController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,42 +52,69 @@ class SignUpScreen extends StatelessWidget {
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(45),
                         )),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const CustomTextField(
-                            icon: Icons.email, label: 'Email'),
-                        const CustomTextField(
-                          icon: Icons.lock,
-                          label: 'Senha',
-                          isPasswordField: true,
-                        ),
-                        const CustomTextField(
-                            icon: Icons.person, label: 'Nome'),
-                        CustomTextField(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CustomTextField(
+                            icon: Icons.email,
+                            label: 'Email',
+                            keyboardType: TextInputType.emailAddress,
+                            validator: emailValidator,
+                            controller: emailController,
+                          ),
+                          CustomTextField(
+                            icon: Icons.lock,
+                            label: 'Senha',
+                            isPasswordField: true,
+                            validator: passwordValidator,
+                            controller: passwordController,
+                          ),
+                          CustomTextField(
+                            icon: Icons.person,
+                            label: 'Nome',
+                            validator: nameValidator,
+                            controller: nameController,
+                          ),
+                          CustomTextField(
                             inputFormatters: [phoneFormatter],
                             icon: Icons.phone,
-                            label: 'Celular'),
-                        CustomTextField(
+                            label: 'Celular',
+                            keyboardType: TextInputType.phone,
+                            validator: phoneValidator,
+                            controller: phoneController,
+                          ),
+                          CustomTextField(
                             inputFormatters: [cpfFormatter],
                             icon: Icons.file_copy,
-                            label: 'CPF'),
-                        SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18),
+                            label: 'CPF',
+                            keyboardType: TextInputType.number,
+                            validator: cpfValidator,
+                            controller: cpfController,
+                          ),
+                          SizedBox(
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                              ),
+                              onPressed: () => {
+                                if (_formKey.currentState!.validate())
+                                  {
+                                    Get.back(),
+                                  }
+                              },
+                              child: const Text(
+                                'Cadastrar usuário',
+                                style: TextStyle(fontSize: 18),
                               ),
                             ),
-                            onPressed: () => {},
-                            child: const Text(
-                              'Cadastrar usuário',
-                              style: TextStyle(fontSize: 18),
-                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
