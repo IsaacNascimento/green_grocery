@@ -104,7 +104,8 @@ class SignUpScreen extends StatelessWidget {
                               onPressed: () => {
                                 if (_formKey.currentState!.validate())
                                   {
-                                    Get.back(),
+                                    // Get.back(),
+                                    // print(phoneController.text.length)
                                   }
                               },
                               child: const Text(
