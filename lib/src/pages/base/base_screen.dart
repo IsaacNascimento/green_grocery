@@ -18,19 +18,17 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       // Content of Screen
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: const [
-          HomeTab(),
-          CartTab(),
-          OrdersTab(),
+        children: [
+          const HomeTab(),
+          const CartTab(),
+          const OrdersTab(),
           ProfileTab(),
         ],
       ),
-
 
       // Navigation App Bar
       bottomNavigationBar: BottomNavigationBar(

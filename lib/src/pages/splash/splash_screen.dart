@@ -1,29 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/instance_manager.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/pages/widgets/app_name_widget.dart';
-import 'package:green_grocer/src/routes/app_pages.dart';
+import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      Get.offNamed(PagesRoutes.signInRoute);
-    });
-  }
+class SplashScreen extends StatelessWidget {
+  SplashScreen({super.key});
+  final AuthController authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
+    authController.validateToken();
+
     return Material(
       child: Container(
         alignment: Alignment.center,

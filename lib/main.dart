@@ -4,7 +4,8 @@ import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 import 'package:green_grocer/src/routes/app_pages.dart';
 
 void main() {
-  Get.lazyPut(() => AuthController());
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.put(AuthController());
   runApp(const MyApp());
 }
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';
 import 'package:green_grocer/src/config/app_data.dart' as app_data;
+import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 
 class ProfileTab extends StatefulWidget {
-  const ProfileTab({super.key});
+  ProfileTab({super.key});
+  final AuthController authController = AuthController();
 
   @override
   State<ProfileTab> createState() => _ProfileTabState();
@@ -17,7 +19,9 @@ class _ProfileTabState extends State<ProfileTab> {
         title: const Text('Perfil do Usuário'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              widget.authController.signOut();
+            },
             icon: const Icon(Icons.logout),
           ),
         ],
@@ -146,7 +150,6 @@ class _ProfileTabState extends State<ProfileTab> {
                   ],
                 ),
               ),
-              
               Positioned(
                 top: 5,
                 right: 5,
