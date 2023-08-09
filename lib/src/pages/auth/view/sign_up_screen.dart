@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
+import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/services/mask_formatters.dart';
@@ -9,12 +9,9 @@ import 'package:green_grocer/src/services/validators.dart';
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
 
+  final AuthController authController = Get.find<AuthController>();
+
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final cpfController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,20 +59,29 @@ class SignUpScreen extends StatelessWidget {
                             label: 'Email',
                             keyboardType: TextInputType.emailAddress,
                             validator: emailValidator,
-                            controller: emailController,
+                            onSaved: (email) {
+                              authController.user.email = email!;
+                              // print(email);
+                            },
                           ),
                           CustomTextField(
                             icon: Icons.lock,
                             label: 'Senha',
                             isPasswordField: true,
                             validator: passwordValidator,
-                            controller: passwordController,
+                            onSaved: (password) {
+                              authController.user.password = password!;
+                              // print(password);
+                            },
                           ),
                           CustomTextField(
                             icon: Icons.person,
                             label: 'Nome',
                             validator: nameValidator,
-                            controller: nameController,
+                            onSaved: (name) {
+                              authController.user.name = name!;
+                              // print(name);
+                            },
                           ),
                           CustomTextField(
                             inputFormatters: [phoneFormatter],
@@ -83,7 +89,10 @@ class SignUpScreen extends StatelessWidget {
                             label: 'Celular',
                             keyboardType: TextInputType.phone,
                             validator: phoneValidator,
-                            controller: phoneController,
+                            onSaved: (phone) {
+                              authController.user.phone = phone!;
+                              // print(phone);
+                            },
                           ),
                           CustomTextField(
                             inputFormatters: [cpfFormatter],
@@ -91,28 +100,42 @@ class SignUpScreen extends StatelessWidget {
                             label: 'CPF',
                             keyboardType: TextInputType.number,
                             validator: cpfValidator,
-                            controller: cpfController,
+                            onSaved: (cpf) {
+                              authController.user.cpf = cpf!;
+                              // print(cpf);
+                            },
                           ),
                           SizedBox(
                             height: 50,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
+                            child: Obx(() {
+                              return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
                                 ),
-                              ),
-                              onPressed: () => {
-                                if (_formKey.currentState!.validate())
-                                  {
-                                    // Get.back(),
-                                    // print(phoneController.text.length)
-                                  }
-                              },
-                              child: const Text(
-                                'Cadastrar usuário',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
+                                onPressed: authController.isFetching.value
+                                    ? null
+                                    : () {
+                                        FocusScope.of(context).unfocus();
+                                        if (_formKey.currentState!.validate()) {
+                                          _formKey.currentState!.save();
+
+                                          authController.signUp();
+
+                                          // print(authController.user);
+                                        }
+                                      },
+                                child: authController.isFetching.value
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Cadastrar usuário',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                              );
+                            }),
                           ),
                         ],
                       ),

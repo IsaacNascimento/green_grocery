@@ -77,4 +77,25 @@ class AuthController extends GetxController {
       },
     );
   }
+
+  Future<void> signUp() async {
+    isFetching.value = true;
+
+    // print('user controller: $user');
+
+    AuthResult response = await authRepository.signUp(user);
+
+    isFetching.value = false;
+
+    response.when(
+      success: (user) {
+        this.user = user;
+
+        saveTokenAndProceedToBase();
+      },
+      error: (message) {
+        utilsServices.showToast(message: message, isError: true);
+      },
+    );
+  }
 }
