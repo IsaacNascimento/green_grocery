@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';
 import 'package:green_grocer/src/config/app_data.dart' as app_data;
 import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 
 class ProfileTab extends StatefulWidget {
   ProfileTab({super.key});
-  final AuthController authController = AuthController();
+  final authController = Get.find<AuthController>();
 
   @override
   State<ProfileTab> createState() => _ProfileTabState();
