@@ -23,6 +23,10 @@ String authErrorsString(String? code) {
     case 'Account already exists for this username.':
       return 'Conta já cadastrada com esse usuário';
 
+    // RESET PASSWORD ERRORS
+    case 'you must provide an email':
+      return 'Digite seu email!';
+
     default:
       return 'Ocorreu algum erro indefinido';
   }

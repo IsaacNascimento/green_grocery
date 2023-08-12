@@ -9,6 +9,7 @@ import 'package:green_grocer/src/services/utils_services.dart';
 
 class AuthController extends GetxController {
   RxBool isFetching = false.obs;
+  RxBool isFetchingResetPassword = false.obs;
 
   final authRepository = AuthRepository();
   final UtilsServices utilsServices = UtilsServices();
@@ -92,6 +93,26 @@ class AuthController extends GetxController {
         this.user = user;
 
         saveTokenAndProceedToBase();
+      },
+      error: (message) {
+        utilsServices.showToast(message: message, isError: true);
+      },
+    );
+  }
+
+  Future<void> resetPassword({required String email}) async {
+    isFetchingResetPassword.value = true;
+
+    AuthResult response = await authRepository.resetPassword(email: email);
+
+    isFetchingResetPassword.value = false;
+
+    response.when(
+      success: (user) {
+        // this.user = user;
+        utilsServices.showToast(
+          message: 'Código de recuperação enviado para $email',
+        );
       },
       error: (message) {
         utilsServices.showToast(message: message, isError: true);

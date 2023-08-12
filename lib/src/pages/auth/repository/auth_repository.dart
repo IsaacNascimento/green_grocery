@@ -9,7 +9,8 @@ class AuthRepository {
   final HttpManager _httpManager = HttpManager();
 
   handleUserOrError(Map<dynamic, dynamic> result) {
-    if (result['result'] != null) {
+    // print('handle error: $result');
+    if (result['status'] == 200) {
       final user = UserModel.fromJson(result['result']);
       return AuthResult.success(user);
     } else {
@@ -53,5 +54,23 @@ class AuthRepository {
 
     //   print('result: $result');
     return handleUserOrError(result);
+  }
+
+  Future<AuthResult> resetPassword({required String email}) async {
+    final result = await _httpManager.restRequest(
+      url: EndPoint.resetPassword,
+      method: HttpMethods.post,
+      body: {
+        'email': email,
+      },
+    );
+
+    if (result['status'] == 200) {
+      final user = UserModel(email: email);
+      return AuthResult.success(user);
+    } else {
+      String? errorMessage = auth_errors.authErrorsString(result['error']);
+      return AuthResult.error(errorMessage);
+    }
   }
 }

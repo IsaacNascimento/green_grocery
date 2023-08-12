@@ -9,7 +9,14 @@ import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/routes/app_pages.dart';
 import 'package:green_grocer/src/services/validators.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   final List<FadeAnimatedText> textosAnimados = [
     FadeAnimatedText('Frutas'),
     FadeAnimatedText('Verduras'),
@@ -19,11 +26,10 @@ class SignInScreen extends StatelessWidget {
     FadeAnimatedText('Laticíneos'),
   ];
 
-  SignInScreen({Key? key}) : super(key: key);
-
   final _formKey = GlobalKey<FormState>();
 
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
 
   final AuthController authController = Get.find();
@@ -41,29 +47,30 @@ class SignInScreen extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Nome do app
-                  const AppNameWidget(
-                    greenTitleColor: Colors.white,
-                    textSize: 40,
-                  ),
-                  // Categorias
-                  SizedBox(
-                    height: 30,
-                    child: DefaultTextStyle(
-                      style: const TextStyle(
-                        fontSize: 25,
-                      ),
-                      child: AnimatedTextKit(
-                          pause: Duration.zero,
-                          repeatForever: true,
-                          animatedTexts: textosAnimados),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Nome do app
+                    const AppNameWidget(
+                      greenTitleColor: Colors.white,
+                      textSize: 40,
                     ),
-                  ),
-                ],
-              )),
+                    // Categorias
+                    SizedBox(
+                      height: 30,
+                      child: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 25,
+                        ),
+                        child: AnimatedTextKit(
+                            pause: Duration.zero,
+                            repeatForever: true,
+                            animatedTexts: textosAnimados),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
               // Formulario
               Container(
@@ -144,7 +151,14 @@ class SignInScreen extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () => {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ForgetPasswordDialog(
+                                  email: emailController.text,
+                                ),
+                              );
+                            },
                             child: Text(
                               'Esqueceu a senha?',
                               style: TextStyle(
@@ -205,6 +219,139 @@ class SignInScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ForgetPasswordDialog extends StatelessWidget {
+  final AuthController authController = Get.find();
+  final _formKey = GlobalKey<FormState>();
+
+  final emailController = TextEditingController();
+  final String email;
+
+  ForgetPasswordDialog({
+    super.key,
+    required this.email,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    emailController.text = email;
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Conteudo
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Titulo
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
+                    child: Text(
+                      'Recuperação de senha',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+
+                  // Descricao
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      top: 10,
+                      bottom: 20,
+                    ),
+                    child: Text(
+                      'Digite seu email para recuperar sua senha',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(),
+                    ),
+                  ),
+
+                  // Campo email
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: CustomTextField(
+                      icon: Icons.email,
+                      label: 'Email',
+                      controller: emailController,
+                      validator: emailValidator,
+                    ),
+                  ),
+
+                  // Botao Recuperar
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: SizedBox(
+                      height: 40,
+                      child: Obx(
+                        () {
+                          return ElevatedButton(
+                            onPressed: authController
+                                    .isFetchingResetPassword.value
+                                ? null
+                                : () {
+                                    FocusScope.of(context).unfocus();
+                                    if (_formKey.currentState!.validate()) {
+                                      final String email = emailController.text;
+                                      // print(email);
+                                      authController.resetPassword(
+                                          email: email);
+                                    }
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              side: const BorderSide(
+                                width: 2,
+                                color: Colors.green,
+                              ),
+                            ),
+                            child: authController.isFetchingResetPassword.value
+                                ? const CircularProgressIndicator()
+                                : const Text(
+                                    'Recuperar',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Botao fechar
+          Positioned(
+            top: 0,
+            right: 5,
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.close),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -33,8 +33,12 @@ class HttpManager {
         data: body,
       );
 
+      Map<String, dynamic> data = {
+        'status': response.statusCode,
+        'result': response.data['result'],
+      };
       // Retorno backend
-      return response.data;
+      return data;
     } on DioException catch (e) {
       // Retorno do error do dio request;
       return e.response?.data ?? {};
