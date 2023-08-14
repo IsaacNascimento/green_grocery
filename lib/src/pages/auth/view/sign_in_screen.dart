@@ -310,7 +310,9 @@ class ForgetPasswordDialog extends StatelessWidget {
                                       final String email = emailController.text;
                                       // print(email);
                                       authController.resetPassword(
-                                          email: email);
+                                        email: email,
+                                      );
+                                      Get.back(result: true);
                                     }
                                   },
                             style: ElevatedButton.styleFrom(

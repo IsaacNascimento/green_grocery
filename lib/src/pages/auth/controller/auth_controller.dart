@@ -111,7 +111,7 @@ class AuthController extends GetxController {
       success: (user) {
         // this.user = user;
         utilsServices.showToast(
-          message: 'Código de recuperação enviado para $email',
+          message: 'Link de recuperação enviado para $email',
         );
       },
       error: (message) {
