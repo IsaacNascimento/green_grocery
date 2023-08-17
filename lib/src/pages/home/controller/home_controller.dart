@@ -8,6 +8,7 @@ class HomeController extends GetxController {
   // Variables
   bool isFetching = false;
   List<CategoryItemModel> categories = [];
+  CategoryItemModel? currentCategory;
 
   // Instances
   final homeRepository = HomeRepository();
@@ -18,6 +19,11 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     getCategoryList();
+  }
+
+  void selectCategory({required CategoryItemModel category}) {
+    currentCategory = category;
+    update();
   }
 
   void setLoading({required bool isLoading}) {
@@ -38,7 +44,9 @@ class HomeController extends GetxController {
         // this.categories = categories;
         categories.assignAll(data);
 
-        print(categories);
+        if (categories.isEmpty) return;
+
+        selectCategory(category: categories.first);
       },
       error: (message) {
         print(message);
