@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
-import 'package:green_grocer/src/pages/home/controller/home_controller.dart';
 import 'package:green_grocer/src/pages/home/view/components/category_tile.dart';
 import 'package:green_grocer/src/config/app_data.dart' as app_data;
 import 'package:green_grocer/src/pages/home/view/components/item_tile.dart';
@@ -16,12 +14,6 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   String selectedCategory = 'Frutas';
-
-  @override
-  void initState() {
-    super.initState();
-    Get.find<HomeController>().printExample();
-  }
 
   @override
   Widget build(BuildContext context) {
