@@ -1,7 +1,7 @@
-import 'package:green_grocer/src/models/item_model.dart';
+import 'package:green_grocer/src/models/product/product_item_model.dart';
 
 class CartItemModel {
-  ItemModel item;
+  ProductItemModel item;
   int quantity;
 
   CartItemModel({

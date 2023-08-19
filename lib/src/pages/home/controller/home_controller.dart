@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
-import 'package:green_grocer/src/models/category_item_model.dart';
+import 'package:green_grocer/src/models/category/category_item_model.dart';
+import 'package:green_grocer/src/models/product/product_item_model.dart';
+import 'package:green_grocer/src/models/search_product/search_product_model.dart';
 import 'package:green_grocer/src/pages/home/repository/home_repository.dart';
 import 'package:green_grocer/src/pages/home/result/home_result.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
@@ -9,6 +11,7 @@ class HomeController extends GetxController {
   bool isFetching = false;
   List<CategoryItemModel> categories = [];
   CategoryItemModel? currentCategory;
+  List<ProductItemModel> products = [];
 
   // Instances
   final homeRepository = HomeRepository();
@@ -22,8 +25,10 @@ class HomeController extends GetxController {
   }
 
   void selectCategory({required CategoryItemModel category}) {
+    // print('Selected Category $category');
     currentCategory = category;
     update();
+    getProductList();
   }
 
   void setLoading({required bool isLoading}) {
@@ -43,6 +48,7 @@ class HomeController extends GetxController {
       success: (data) {
         // this.categories = categories;
         categories.assignAll(data);
+        update();
 
         if (categories.isEmpty) return;
 
@@ -54,6 +60,31 @@ class HomeController extends GetxController {
           message: message,
           isError: true,
         );
+      },
+    );
+  }
+
+  Future<void> getProductList() async {
+    setLoading(isLoading: true);
+
+    // print('currentCategory $currentCategory');
+    final SearchProductModel body =
+        SearchProductModel(categoryId: currentCategory!.id!);
+
+    HomeResult<ProductItemModel> result =
+        await homeRepository.getProductList(body: body);
+
+    setLoading(isLoading: false);
+
+    result.when(
+      success: (data) {
+        // print('data $data');
+        products.assignAll(data);
+        update();
+      },
+      error: (message) {
+        print(message);
+        utilsServices.showToast(message: message, isError: true);
       },
     );
   }

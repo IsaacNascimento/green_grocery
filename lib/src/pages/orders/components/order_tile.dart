@@ -142,7 +142,7 @@ class _OrderItemWidget extends StatelessWidget {
             '${orderedItem.quantity} ${orderedItem.item.unit} ',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          Expanded(child: Text(orderedItem.item.itemName)),
+          Expanded(child: Text(orderedItem.item.title)),
           Text(
             utilsServices.priceToCurrency(
               orderedItem.totalPrice(),

@@ -9,4 +9,5 @@ abstract class EndPoint {
 
   // HOME
   static const String categoryList = '$baseUrl/get-category-list';
+  static const String productList = '$baseUrl/get-product-list';
 }

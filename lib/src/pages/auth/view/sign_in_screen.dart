@@ -1,7 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:green_grocer/src/models/user_model.dart';
+import 'package:green_grocer/src/models/user/user_model.dart';
 import 'package:green_grocer/src/pages/auth/controller/auth_controller.dart';
 import 'package:green_grocer/src/pages/widgets/app_name_widget.dart';
 import 'package:green_grocer/src/pages/widgets/custom_text_field.dart';

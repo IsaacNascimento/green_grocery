@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/pages/home/controller/home_controller.dart';
 import 'package:green_grocer/src/pages/home/view/components/category_tile.dart';
-import 'package:green_grocer/src/config/app_data.dart' as app_data;
 import 'package:green_grocer/src/pages/home/view/components/item_tile.dart';
 import 'package:green_grocer/src/pages/widgets/app_name_widget.dart';
 
@@ -137,10 +136,10 @@ class _HomeTabState extends State<HomeTab> {
                                 mainAxisSpacing: 10,
                                 crossAxisSpacing: 10,
                                 childAspectRatio: 9 / 11.5),
-                        itemCount: app_data.items.length,
+                        itemCount: controller.products.length,
                         itemBuilder: (_, index) {
                           return ItemTile(
-                            item: app_data.items[index],
+                            item: controller.products[index],
                           );
                         },
                       ),

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:green_grocer/src/models/user_model.dart';
+import 'package:green_grocer/src/models/user/user_model.dart';
 
 part 'auth_result.freezed.dart';
 

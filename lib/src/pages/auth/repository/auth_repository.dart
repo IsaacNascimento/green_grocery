@@ -1,5 +1,5 @@
 import 'package:green_grocer/src/constants/endpoints.dart';
-import 'package:green_grocer/src/models/user_model.dart';
+import 'package:green_grocer/src/models/user/user_model.dart';
 import 'package:green_grocer/src/pages/auth/result/auth_result.dart';
 import 'package:green_grocer/src/services/http_manager.dart';
 import 'package:green_grocer/src/pages/auth/repository/auth_errors.dart'

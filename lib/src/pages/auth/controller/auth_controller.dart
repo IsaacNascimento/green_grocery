@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:green_grocer/src/constants/storage_keys.dart';
-import 'package:green_grocer/src/models/user_model.dart';
+import 'package:green_grocer/src/models/user/user_model.dart';
 import 'package:green_grocer/src/pages/auth/repository/auth_repository.dart';
 import 'package:green_grocer/src/pages/auth/result/auth_result.dart';
 import 'package:green_grocer/src/routes/app_pages.dart';

@@ -21,7 +21,7 @@ class _CartTabState extends State<CartTab> {
       app_data.cartItems.remove(cartItem);
 
       utilsServices.showToast(
-          message: '${cartItem.item.itemName} removido(A) do Carrinho');
+          message: '${cartItem.item.title} removido(A) do Carrinho');
     });
   }
 

@@ -27,14 +27,14 @@ class _CartTileState extends State<CartTile> {
       child: ListTile(
         // imagem
         leading: Image.asset(
-          widget.cartItem.item.imgUrl,
+          widget.cartItem.item.picture,
           height: 60,
           width: 60,
         ),
 
         // Titulo
         title: Text(
-          widget.cartItem.item.itemName,
+          widget.cartItem.item.title,
           style: const TextStyle(fontWeight: FontWeight.w500),
         ),
 

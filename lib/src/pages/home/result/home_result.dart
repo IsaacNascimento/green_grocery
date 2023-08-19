@@ -3,6 +3,6 @@ part 'home_result.freezed.dart';
 
 @freezed
 class HomeResult<T> with _$HomeResult<T> {
-  factory HomeResult.success(List<T> categories) = Success;
+  factory HomeResult.success(List<T> data) = Success;
   factory HomeResult.error(String error) = Error;
 }

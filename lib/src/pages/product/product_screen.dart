@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
-import 'package:green_grocer/src/models/item_model.dart';
+import 'package:green_grocer/src/models/product/product_item_model.dart';
 import 'package:green_grocer/src/pages/widgets/quantity_widgets.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, required this.item});
 
-  final ItemModel item;
+  final ProductItemModel item;
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -29,8 +29,8 @@ class _ProductScreenState extends State<ProductScreen> {
             children: [
               Expanded(
                 child: Hero(
-                  tag: widget.item.imgUrl,
-                  child: Image.asset(widget.item.imgUrl),
+                  tag: widget.item.picture,
+                  child: Image.network(widget.item.picture),
                 ),
               ),
               Expanded(
@@ -56,7 +56,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         children: [
                           Expanded(
                             child: Text(
-                              widget.item.itemName,
+                              widget.item.title,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: const TextStyle(

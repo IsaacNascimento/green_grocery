@@ -18,19 +18,19 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$HomeResult<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<T> categories) success,
+    required TResult Function(List<T> data) success,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<T> categories)? success,
+    TResult? Function(List<T> data)? success,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<T> categories)? success,
+    TResult Function(List<T> data)? success,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -80,7 +80,7 @@ abstract class _$$SuccessCopyWith<T, $Res> {
           _$Success<T> value, $Res Function(_$Success<T>) then) =
       __$$SuccessCopyWithImpl<T, $Res>;
   @useResult
-  $Res call({List<T> categories});
+  $Res call({List<T> data});
 }
 
 /// @nodoc
@@ -94,12 +94,12 @@ class __$$SuccessCopyWithImpl<T, $Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? categories = null,
+    Object? data = null,
   }) {
     return _then(_$Success<T>(
-      null == categories
-          ? _value._categories
-          : categories // ignore: cast_nullable_to_non_nullable
+      null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
               as List<T>,
     ));
   }
@@ -108,19 +108,19 @@ class __$$SuccessCopyWithImpl<T, $Res>
 /// @nodoc
 
 class _$Success<T> implements Success<T> {
-  _$Success(final List<T> categories) : _categories = categories;
+  _$Success(final List<T> data) : _data = data;
 
-  final List<T> _categories;
+  final List<T> _data;
   @override
-  List<T> get categories {
-    if (_categories is EqualUnmodifiableListView) return _categories;
+  List<T> get data {
+    if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_categories);
+    return EqualUnmodifiableListView(_data);
   }
 
   @override
   String toString() {
-    return 'HomeResult<$T>.success(categories: $categories)';
+    return 'HomeResult<$T>.success(data: $data)';
   }
 
   @override
@@ -128,13 +128,12 @@ class _$Success<T> implements Success<T> {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Success<T> &&
-            const DeepCollectionEquality()
-                .equals(other._categories, _categories));
+            const DeepCollectionEquality().equals(other._data, _data));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_categories));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
 
   @JsonKey(ignore: true)
   @override
@@ -145,30 +144,30 @@ class _$Success<T> implements Success<T> {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<T> categories) success,
+    required TResult Function(List<T> data) success,
     required TResult Function(String error) error,
   }) {
-    return success(categories);
+    return success(data);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<T> categories)? success,
+    TResult? Function(List<T> data)? success,
     TResult? Function(String error)? error,
   }) {
-    return success?.call(categories);
+    return success?.call(data);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<T> categories)? success,
+    TResult Function(List<T> data)? success,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success(categories);
+      return success(data);
     }
     return orElse();
   }
@@ -206,9 +205,9 @@ class _$Success<T> implements Success<T> {
 }
 
 abstract class Success<T> implements HomeResult<T> {
-  factory Success(final List<T> categories) = _$Success<T>;
+  factory Success(final List<T> data) = _$Success<T>;
 
-  List<T> get categories;
+  List<T> get data;
   @JsonKey(ignore: true)
   _$$SuccessCopyWith<T, _$Success<T>> get copyWith =>
       throw _privateConstructorUsedError;
@@ -276,7 +275,7 @@ class _$Error<T> implements Error<T> {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<T> categories) success,
+    required TResult Function(List<T> data) success,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -285,7 +284,7 @@ class _$Error<T> implements Error<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<T> categories)? success,
+    TResult? Function(List<T> data)? success,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -294,7 +293,7 @@ class _$Error<T> implements Error<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<T> categories)? success,
+    TResult Function(List<T> data)? success,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {

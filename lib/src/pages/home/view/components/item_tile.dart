@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
-import 'package:green_grocer/src/models/item_model.dart';
+import 'package:green_grocer/src/models/product/product_item_model.dart';
 import 'package:green_grocer/src/pages/product/product_screen.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class ItemTile extends StatelessWidget {
-  final ItemModel item;
+  final ProductItemModel item;
 
   ItemTile({super.key, required this.item});
 
@@ -40,14 +40,14 @@ class ItemTile extends StatelessWidget {
                   // Imagem
                   Expanded(
                     child: Hero(
-                      tag: item.imgUrl,
-                      child: Image.asset(item.imgUrl),
+                      tag: item.picture,
+                      child: Image.network(item.picture),
                     ),
                   ),
 
                   // Nome
                   Text(
-                    item.itemName,
+                    item.title,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
