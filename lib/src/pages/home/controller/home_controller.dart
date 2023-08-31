@@ -8,10 +8,11 @@ import 'package:green_grocer/src/services/utils_services.dart';
 
 class HomeController extends GetxController {
   // Variables
-  bool isFetching = false;
+  bool isCategoryFetching = false;
+  bool isProductFetching = true;
   List<CategoryItemModel> categories = [];
   CategoryItemModel? currentCategory;
-  List<ProductItemModel> products = [];
+  List<ProductItemModel> get products => currentCategory?.items ?? [];
 
   // Instances
   final homeRepository = HomeRepository();
@@ -28,21 +29,27 @@ class HomeController extends GetxController {
     // print('Selected Category $category');
     currentCategory = category;
     update();
+
+    if (currentCategory!.items.isNotEmpty) return;
     getProductList();
   }
 
-  void setLoading({required bool isLoading}) {
-    isFetching = isLoading;
+  void setLoading({required bool isLoading, required bool isProduct}) {
+    if (isProduct) {
+      isProductFetching = isLoading;
+    } else {
+      isCategoryFetching = isLoading;
+    }
     update();
   }
 
   Future<void> getCategoryList() async {
-    setLoading(isLoading: true);
+    setLoading(isLoading: true, isProduct: false);
 
     HomeResult<CategoryItemModel> result =
         await homeRepository.getCategoryList();
 
-    setLoading(isLoading: false);
+    setLoading(isLoading: false, isProduct: false);
 
     result.when(
       success: (data) {
@@ -65,7 +72,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getProductList() async {
-    setLoading(isLoading: true);
+    setLoading(isLoading: true, isProduct: true);
 
     // print('currentCategory $currentCategory');
     final SearchProductModel body =
@@ -74,12 +81,12 @@ class HomeController extends GetxController {
     HomeResult<ProductItemModel> result =
         await homeRepository.getProductList(body: body);
 
-    setLoading(isLoading: false);
+    setLoading(isLoading: false, isProduct: true);
 
     result.when(
       success: (data) {
         // print('data $data');
-        products.assignAll(data);
+        currentCategory!.items = data;
         update();
       },
       error: (message) {

@@ -90,39 +90,44 @@ class _HomeTabState extends State<HomeTab> {
           // Categorias
           GetBuilder<HomeController>(
             builder: (controller) {
-              return Container(
-                padding: const EdgeInsets.only(left: 25),
-                child: SizedBox(
-                  height: 40,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, index) {
-                      return CategoryTile(
-                          onPressed: () {
-                            setState(
-                              () {
-                                controller.selectCategory(
-                                  category: controller.categories[index],
-                                );
-                              },
-                            );
+              return controller.isCategoryFetching
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.only(left: 25),
+                      child: SizedBox(
+                        height: 40,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (_, index) {
+                            return CategoryTile(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      controller.selectCategory(
+                                        category: controller.categories[index],
+                                      );
+                                    },
+                                  );
+                                },
+                                category: controller.categories[index].title!,
+                                isSelected: controller.categories[index] ==
+                                    controller.currentCategory);
                           },
-                          category: controller.categories[index].title!,
-                          isSelected: controller.categories[index] ==
-                              controller.currentCategory);
-                    },
-                    separatorBuilder: (_, index) => const SizedBox(width: 10),
-                    itemCount: controller.categories.length,
-                  ),
-                ),
-              );
+                          separatorBuilder: (_, index) =>
+                              const SizedBox(width: 10),
+                          itemCount: controller.categories.length,
+                        ),
+                      ),
+                    );
             },
           ),
 
           // Grid
           GetBuilder<HomeController>(
             builder: (controller) {
-              return controller.isFetching
+              return controller.isProductFetching
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
