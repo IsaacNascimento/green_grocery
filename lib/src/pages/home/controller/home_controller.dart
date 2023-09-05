@@ -14,8 +14,20 @@ class HomeController extends GetxController {
   CategoryItemModel? currentCategory;
   List<ProductItemModel> get products => currentCategory?.items ?? [];
 
+  bool get isLastPage {
+    // Quantidade de Items for menor que Items por Página = Última página
+    if (currentCategory!.items.length < searchProductModel.itemsPerPage) {
+      return true;
+    }
+
+    // A Quantidade de páginas x Quantidade de Items por página é menor que a quantidade de Itens?
+    return searchProductModel.page! * searchProductModel.itemsPerPage >
+        products.length;
+  }
+
   // Instances
   final homeRepository = HomeRepository();
+  SearchProductModel searchProductModel = SearchProductModel();
   final UtilsServices utilsServices = UtilsServices();
 
   // Methods
@@ -27,10 +39,14 @@ class HomeController extends GetxController {
 
   void selectCategory({required CategoryItemModel category}) {
     // print('Selected Category $category');
+    // Resetar a paginação para 0, quando trocar para uma nova categoria.
+    searchProductModel.page = 0;
     currentCategory = category;
+    searchProductModel.categoryId = category.id;
     update();
 
     if (currentCategory!.items.isNotEmpty) return;
+
     getProductList();
   }
 
@@ -62,6 +78,7 @@ class HomeController extends GetxController {
         selectCategory(category: categories.first);
       },
       error: (message) {
+        // ignore: avoid_print
         print(message);
         utilsServices.showToast(
           message: message,
@@ -71,28 +88,37 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> getProductList() async {
-    setLoading(isLoading: true, isProduct: true);
+  // int rodou = 0;
+
+  Future<void> getProductList({bool canLoad = true}) async {
+    // print("Rodou getProductList ${rodou = rodou + 1}x");
+    if (canLoad) setLoading(isLoading: true, isProduct: true);
 
     // print('currentCategory $currentCategory');
-    final SearchProductModel body =
-        SearchProductModel(categoryId: currentCategory!.id!);
-
     HomeResult<ProductItemModel> result =
-        await homeRepository.getProductList(body: body);
+        await homeRepository.getProductList(body: searchProductModel);
+
+    // print("result $result");
 
     setLoading(isLoading: false, isProduct: true);
 
     result.when(
       success: (data) {
         // print('data $data');
-        currentCategory!.items = data;
+        currentCategory!.items.addAll(data);
         update();
       },
       error: (message) {
+        // ignore: avoid_print
         print(message);
         utilsServices.showToast(message: message, isError: true);
       },
     );
+  }
+
+  void loadMoreProducts() {
+    searchProductModel.page = searchProductModel.page! + 1;
+
+    getProductList(canLoad: false);
   }
 }

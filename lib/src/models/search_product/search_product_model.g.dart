@@ -11,7 +11,7 @@ SearchProductModel _$SearchProductModelFromJson(Map<String, dynamic> json) =>
       page: json['page'] as int? ?? 0,
       itemsPerPage: json['itemsPerPage'] as int? ?? 20,
       title: json['title'] as String?,
-      categoryId: json['categoryId'] as String? ?? '',
+      categoryId: json['categoryId'] as String?,
     );
 
 Map<String, dynamic> _$SearchProductModelToJson(SearchProductModel instance) =>

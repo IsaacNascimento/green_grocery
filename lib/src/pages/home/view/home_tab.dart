@@ -143,6 +143,13 @@ class _HomeTabState extends State<HomeTab> {
                                 childAspectRatio: 9 / 11.5),
                         itemCount: controller.products.length,
                         itemBuilder: (_, index) {
+                          bool isLastItem =
+                              (index + 1) == controller.products.length;
+                          bool isLastPage = controller.isLastPage;
+                          if (isLastItem && !isLastPage) {
+                            controller.loadMoreProducts();
+                          }
+
                           return ItemTile(
                             item: controller.products[index],
                           );

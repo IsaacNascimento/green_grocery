@@ -5,16 +5,16 @@ part 'search_product_model.g.dart';
 
 @JsonSerializable()
 class SearchProductModel {
-  int page;
+  int? page;
   int itemsPerPage;
   String? title;
-  String categoryId;
+  String? categoryId;
 
   SearchProductModel({
     this.page = 0,
-    this.itemsPerPage = 20,
+    this.itemsPerPage = 6,
     this.title,
-    this.categoryId = '',
+    this.categoryId,
   });
 
   factory SearchProductModel.fromJson(Map<String, dynamic> json) =>
