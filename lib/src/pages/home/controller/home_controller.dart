@@ -41,9 +41,10 @@ class HomeController extends GetxController {
       searchTitle,
       (callback) {
         print(searchTitle);
+        update();
       },
       time: const Duration(
-        milliseconds: 600,
+        milliseconds: 450,
       ),
     );
 

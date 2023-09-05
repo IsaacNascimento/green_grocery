@@ -14,7 +14,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  final homeController = Get.find<HomeController>();
+  final searchFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,37 +56,58 @@ class _HomeTabState extends State<HomeTab> {
       body: Column(
         children: [
           // Campo de pesquisa
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: TextFormField(
-              onChanged: (value) {
-                if (value.length > 2) {
-                  homeController.searchTitle.value = value;
-                }
-              },
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                isDense: true,
-                hintText: 'Pesquise aqui...',
-                hintStyle: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: CustomColors.customContrastColor,
-                  size: 21,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60),
-                  borderSide: const BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
+          GetBuilder<HomeController>(
+            builder: (controller) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextFormField(
+                  controller: searchFieldController,
+                  onChanged: (value) {
+                    if (value.length > 2) {
+                      controller.searchTitle.value = value;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    suffixIcon: searchFieldController.text.isNotEmpty &&
+                            controller.searchTitle.value.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              searchFieldController.clear();
+                              controller.searchTitle.value = "";
+                              FocusScope.of(context).unfocus();
+                            },
+                            icon: Icon(
+                              Icons.close,
+                              color: CustomColors.customContrastColor,
+                              size: 21,
+                            ),
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.white,
+                    isDense: true,
+                    hintText: 'Pesquise aqui...',
+                    hintStyle: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontSize: 14,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: CustomColors.customContrastColor,
+                      size: 21,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60),
+                      borderSide: const BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
 
           // Categorias
