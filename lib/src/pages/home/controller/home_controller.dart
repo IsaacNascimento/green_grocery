@@ -40,8 +40,7 @@ class HomeController extends GetxController {
     debounce(
       searchTitle,
       (callback) {
-        print(searchTitle);
-        update();
+        getProductByTitle();
       },
       time: const Duration(
         milliseconds: 450,
@@ -105,8 +104,17 @@ class HomeController extends GetxController {
   // int rodou = 0;
 
   Future<void> getProductList({bool canLoad = true}) async {
+    searchProductModel.title = null;
     // print("Rodou getProductList ${rodou = rodou + 1}x");
     if (canLoad) setLoading(isLoading: true, isProduct: true);
+
+    if (searchTitle.value.isNotEmpty) {
+      searchProductModel.title = searchTitle.value;
+
+      if (currentCategory!.id == "todos") {
+        searchProductModel.categoryId = null;
+      }
+    }
 
     // print('currentCategory $currentCategory');
     HomeResult<ProductItemModel> result =
@@ -134,5 +142,40 @@ class HomeController extends GetxController {
     searchProductModel.page = searchProductModel.page! + 1;
 
     getProductList(canLoad: false);
+  }
+
+  void getProductByTitle() {
+    // Apagar todos os produtos das categorias
+    for (CategoryItemModel category in categories) {
+      category.items.clear();
+      searchProductModel.page = 0;
+    }
+
+    if (searchTitle.value.isEmpty) {
+      categories.removeAt(0);
+    } else {
+      CategoryItemModel? checkCategories =
+          categories.firstWhereOrNull((element) => element.id == "todos");
+
+      if (checkCategories == null) {
+        // Criar uma nova Categoria com Todos
+        final allProductsCategory = CategoryItemModel(
+          title: "Todos",
+          id: "todos",
+          items: [],
+        );
+        searchProductModel.page = 0;
+        categories.insert(0, allProductsCategory);
+      } else {
+        checkCategories.items.clear();
+        searchProductModel.page = 0;
+      }
+    }
+
+    currentCategory = categories.first;
+
+    update();
+
+    getProductList();
   }
 }

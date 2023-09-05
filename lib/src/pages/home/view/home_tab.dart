@@ -75,6 +75,10 @@ class _HomeTabState extends State<HomeTab> {
                             onPressed: () {
                               searchFieldController.clear();
                               controller.searchTitle.value = "";
+
+                              // Quando removido o valor do campo, deve-se voltar para a primeira categoria;
+                              controller.searchProductModel.categoryId =
+                                  controller.categories.elementAt(1).id;
                               FocusScope.of(context).unfocus();
                             },
                             icon: Icon(
@@ -155,28 +159,43 @@ class _HomeTabState extends State<HomeTab> {
                       child: CircularProgressIndicator(),
                     )
                   : Expanded(
-                      child: GridView.builder(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        physics: const BouncingScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10,
-                                childAspectRatio: 9 / 11.5),
-                        itemCount: controller.products.length,
-                        itemBuilder: (_, index) {
-                          bool isLastItem =
-                              (index + 1) == controller.products.length;
-                          bool isLastPage = controller.isLastPage;
-                          if (isLastItem && !isLastPage) {
-                            controller.loadMoreProducts();
-                          }
+                      child: Visibility(
+                        visible: (controller.currentCategory?.items ?? [])
+                            .isNotEmpty,
+                        replacement: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 40,
+                              color: CustomColors.customSwatchColor,
+                            ),
+                            const Text("Não há itens para apresentar")
+                          ],
+                        ),
+                        child: GridView.builder(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          physics: const BouncingScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 9 / 11.5),
+                          itemCount: controller.products.length,
+                          itemBuilder: (_, index) {
+                            bool isLastItem =
+                                (index + 1) == controller.products.length;
+                            bool isLastPage = controller.isLastPage;
+                            if (isLastItem && !isLastPage) {
+                              controller.loadMoreProducts();
+                            }
 
-                          return ItemTile(
-                            item: controller.products[index],
-                          );
-                        },
+                            return ItemTile(
+                              item: controller.products[index],
+                            );
+                          },
+                        ),
                       ),
                     );
             },
