@@ -10,4 +10,9 @@ abstract class EndPoint {
   // HOME
   static const String categoryList = '$baseUrl/get-category-list';
   static const String productList = '$baseUrl/get-product-list';
+
+  // CART
+  static const String getCartItems = '$baseUrl/get-cart-items';
+  static const String addItemToCart = '$baseUrl/add-item-to-cart';
+  static const String modifyItemQuantity = '$baseUrl/modify-item-quantity';
 }

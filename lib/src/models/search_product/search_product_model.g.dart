@@ -9,7 +9,7 @@ part of 'search_product_model.dart';
 SearchProductModel _$SearchProductModelFromJson(Map<String, dynamic> json) =>
     SearchProductModel(
       page: json['page'] as int? ?? 0,
-      itemsPerPage: json['itemsPerPage'] as int? ?? 20,
+      itemsPerPage: json['itemsPerPage'] as int? ?? 6,
       title: json['title'] as String?,
       categoryId: json['categoryId'] as String?,
     );
