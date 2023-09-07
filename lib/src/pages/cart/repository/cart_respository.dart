@@ -9,19 +9,20 @@ class CartRepository {
     required String token,
     required String userId,
   }) async {
-    final dynamic result = await _httpManager.restRequest(
+    // print("(repository) => user id: $userId, user token: $token");
+    final result = await _httpManager.restRequest(
         url: EndPoint.getCartItems,
         method: HttpMethods.post,
         headers: {
-          "X-Parse-Session-Token": token
+          'X-Parse-Session-Token': token
         },
         body: {
-          "user": userId,
+          'user': userId,
         });
 
     if (result['status'] == 200) {
       final List items = result['result'];
-      print("items: $items");
+      print('items: $items');
     } else {
       print(result);
     }

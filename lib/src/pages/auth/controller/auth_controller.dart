@@ -15,7 +15,7 @@ class AuthController extends GetxController {
   final UtilsServices utilsServices = UtilsServices();
   final TokenService tokenService = TokenService();
 
-  UserModel user = UserModel(email: '');
+  UserModel currentUser = UserModel(email: '');
 
   Future<void> validateToken() async {
     // Recuperar o Token salvo localmente
@@ -29,7 +29,7 @@ class AuthController extends GetxController {
 
     result.when(
       success: (user) {
-        this.user = user;
+        currentUser = user;
         saveTokenAndProceedToBase();
       },
       error: (message) {
@@ -40,10 +40,13 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     // Zerar o user
-    user = UserModel(email: '');
+    currentUser = UserModel(email: '');
 
     // Remover token Localmente
     await tokenService.removeData(key: StorageKeys.tokenGreenGrocer);
+
+    // Remover userId Localmente
+    await tokenService.removeData(key: StorageKeys.userId);
 
     // Navegar para Login
     Get.offAllNamed(PagesRoutes.signInRoute);
@@ -51,7 +54,11 @@ class AuthController extends GetxController {
 
   void saveTokenAndProceedToBase() {
     // Salvar o Token
-    tokenService.saveData(key: StorageKeys.tokenGreenGrocer, data: user.token!);
+    tokenService.saveData(
+        key: StorageKeys.tokenGreenGrocer, data: currentUser.token!);
+
+    // Salvar o userId
+    tokenService.saveData(key: StorageKeys.userId, data: currentUser.id!);
 
     // Ir para base Screen
     Get.offAllNamed(PagesRoutes.baseRoute);
@@ -68,7 +75,7 @@ class AuthController extends GetxController {
     response.when(
       success: (user) {
         // print(user);
-        this.user = user;
+        currentUser = user;
 
         saveTokenAndProceedToBase();
       },
@@ -84,13 +91,13 @@ class AuthController extends GetxController {
 
     // print('user controller: $user');
 
-    AuthResult response = await authRepository.signUp(user);
+    AuthResult response = await authRepository.signUp(currentUser);
 
     isFetching.value = false;
 
     response.when(
       success: (user) {
-        this.user = user;
+        currentUser = user;
 
         saveTokenAndProceedToBase();
       },

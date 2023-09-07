@@ -60,7 +60,7 @@ class SignUpScreen extends StatelessWidget {
                             keyboardType: TextInputType.emailAddress,
                             validator: emailValidator,
                             onSaved: (email) {
-                              authController.user.email = email!;
+                              authController.currentUser.email = email!;
                               // print(email);
                             },
                           ),
@@ -70,7 +70,7 @@ class SignUpScreen extends StatelessWidget {
                             isPasswordField: true,
                             validator: passwordValidator,
                             onSaved: (password) {
-                              authController.user.password = password!;
+                              authController.currentUser.password = password!;
                               // print(password);
                             },
                           ),
@@ -79,7 +79,7 @@ class SignUpScreen extends StatelessWidget {
                             label: 'Nome',
                             validator: nameValidator,
                             onSaved: (name) {
-                              authController.user.name = name!;
+                              authController.currentUser.name = name!;
                               // print(name);
                             },
                           ),
@@ -90,7 +90,7 @@ class SignUpScreen extends StatelessWidget {
                             keyboardType: TextInputType.phone,
                             validator: phoneValidator,
                             onSaved: (phone) {
-                              authController.user.phone = phone!;
+                              authController.currentUser.phone = phone!;
                               // print(phone);
                             },
                           ),
@@ -101,7 +101,7 @@ class SignUpScreen extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             validator: cpfValidator,
                             onSaved: (cpf) {
-                              authController.user.cpf = cpf!;
+                              authController.currentUser.cpf = cpf!;
                               // print(cpf);
                             },
                           ),
