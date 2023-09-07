@@ -1,4 +1,4 @@
-import 'package:green_grocer/src/models/cart_item_model.dart';
+import 'package:green_grocer/src/models/cart/cart_item_model.dart';
 import 'package:green_grocer/src/models/order_item_model.dart';
 import 'package:green_grocer/src/models/product/product_item_model.dart';
 import 'package:green_grocer/src/models/user/user_model.dart';
@@ -76,9 +76,9 @@ List<String> categories = [
 ];
 
 List<CartItemModel> cartItems = [
-  CartItemModel(item: apple, quantity: 2),
-  CartItemModel(item: mango, quantity: 2),
-  CartItemModel(item: guava, quantity: 2),
+  CartItemModel(item: apple, quantity: 2, id: ''),
+  CartItemModel(item: mango, quantity: 2, id: ''),
+  CartItemModel(item: guava, quantity: 2, id: ''),
 ];
 
 UserModel user = UserModel(
@@ -95,8 +95,8 @@ List<OrderModel> orders = [
     createdDateTime: DateTime.parse('2021-06-08 10:00:10.458'),
     overdueDateTime: DateTime.parse('2023-08-08 11:00:10.458'),
     items: [
-      CartItemModel(item: apple, quantity: 5),
-      CartItemModel(item: mango, quantity: 2),
+      CartItemModel(item: apple, quantity: 5, id: ''),
+      CartItemModel(item: mango, quantity: 2, id: ''),
     ],
     status: 'pending_payment',
     copyAndPaste: 'qwsq12sdf4h6',
@@ -109,7 +109,7 @@ List<OrderModel> orders = [
     createdDateTime: DateTime.parse('2023-08-08 10:00:10.458'),
     overdueDateTime: DateTime.parse('2023-08-08 11:00:10.458'),
     items: [
-      CartItemModel(item: guava, quantity: 2),
+      CartItemModel(item: guava, quantity: 2, id: ''),
     ],
     status: 'delivered',
     copyAndPaste: 'qwsq1ad9s2h6ay',

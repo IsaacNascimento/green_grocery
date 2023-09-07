@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
-import 'package:green_grocer/src/models/cart_item_model.dart';
+import 'package:green_grocer/src/models/cart/cart_item_model.dart';
 import 'package:green_grocer/src/pages/widgets/quantity_widgets.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
@@ -26,7 +26,7 @@ class _CartTileState extends State<CartTile> {
       ),
       child: ListTile(
         // imagem
-        leading: Image.asset(
+        leading: Image.network(
           widget.cartItem.item.picture,
           height: 60,
           width: 60,

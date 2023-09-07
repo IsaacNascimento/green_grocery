@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:green_grocer/src/models/cart_item_model.dart';
+import 'package:green_grocer/src/models/cart/cart_item_model.dart';
 import 'package:green_grocer/src/models/order_item_model.dart';
 import 'package:green_grocer/src/pages/orders/components/order_status_widget.dart';
 import 'package:green_grocer/src/pages/widgets/payment_dialog.dart';
