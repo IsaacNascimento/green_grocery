@@ -28,18 +28,6 @@ class _CartTabState extends State<CartTab> {
     });
   }
 
-  double cartTotalPrice({required List<CartItemModel> cartItems}) {
-    List<CartItemModel> cartItemModel = cartItems;
-    int cartItemLenght = cartItemModel.length;
-    double totalPrice = 0;
-
-    for (var i = 0; i < cartItemLenght; i++) {
-      totalPrice += cartItemModel[i].totalPrice();
-    }
-
-    return totalPrice;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,8 +85,8 @@ class _CartTabState extends State<CartTab> {
                 GetBuilder<CartController>(
                   builder: ((controller) {
                     return Text(
-                      utilsServices.priceToCurrency(
-                          cartTotalPrice(cartItems: controller.cartItems)),
+                      utilsServices
+                          .priceToCurrency(controller.cartTotalPrice()),
                       style: TextStyle(
                         fontSize: 23,
                         color: CustomColors.customSwatchColor,

@@ -20,6 +20,7 @@ class CartController extends GetxController {
   void onInit() {
     super.onInit();
     getCartItems();
+    cartTotalPrice();
   }
 
   void setLoading({required bool isLoading}) {
@@ -56,5 +57,17 @@ class CartController extends GetxController {
         );
       },
     );
+  }
+
+  double cartTotalPrice() {
+    List<CartItemModel> cartItemModel = cartItems;
+    int cartItemLenght = cartItemModel.length;
+    double totalPrice = 0;
+
+    for (var i = 0; i < cartItemLenght; i++) {
+      totalPrice += cartItemModel[i].totalPrice();
+    }
+
+    return totalPrice;
   }
 }
