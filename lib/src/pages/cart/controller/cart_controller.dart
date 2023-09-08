@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:green_grocer/src/constants/storage_keys.dart';
 import 'package:green_grocer/src/models/cart/cart_item_model.dart';
+import 'package:green_grocer/src/models/product/product_item_model.dart';
 import 'package:green_grocer/src/pages/cart/repository/cart_respository.dart';
 import 'package:green_grocer/src/pages/cart/result/cart_result.dart';
 import 'package:green_grocer/src/services/token_servicer.dart';
@@ -78,8 +79,45 @@ class CartController extends GetxController {
     );
   }
 
-  void addItemToCart() {
-    print('user_id: $_userId');
-    print('token: $_token');
+  int _getItemIndex(ProductItemModel item) {
+    return cartItems.indexWhere((itemInList) => itemInList.id == item.id);
+  }
+
+  Future<void> addItemToCart(
+      {required ProductItemModel item, int quantity = 1}) async {
+    int itemIndex = _getItemIndex(item);
+
+    if (itemIndex >= 0) {
+      // Item Já existe no carrinho
+
+      cartItems[itemIndex].quantity += quantity;
+    } else {
+      // Novo item;
+
+      cartItems.add(
+        CartItemModel(
+          id: '',
+          item: item,
+          quantity: quantity,
+        ),
+      );
+
+      final CartResult<String> result = await _cartRepository.addItemToCart(
+        token: _token!,
+        userId: _userId!,
+        quantity: quantity,
+        productId: item.id,
+      );
+
+      result.when(
+        success: (data) {
+          print('(addItemToCart) data: $data');
+        },
+        error: (error) {
+          print('(addItemToCart) error: $error');
+        },
+      );
+    }
+    update();
   }
 }

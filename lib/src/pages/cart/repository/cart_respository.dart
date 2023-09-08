@@ -35,10 +35,10 @@ class CartRepository {
     }
   }
 
-  Future<void> addItemToCart({
+  Future<CartResult<String>> addItemToCart({
     required String token,
     required String userId,
-    required String quantity,
+    required int quantity,
     required String productId,
   }) async {
     final result = await _httpManager.restRequest(
@@ -48,15 +48,18 @@ class CartRepository {
           'X-Parse-Session-Token': token
         },
         body: {
-          "user": userId,
-          "qauntity": quantity,
-          "productId": productId,
+          'user': userId,
+          'quantity': quantity,
+          'productId': productId,
         });
 
     if (result['status'] == 200) {
       print(result);
+      return CartResult<String>.success(result['result']['id']);
     } else {
       print(result['error']);
+      String errorMessage = 'Não foi possível adicionar o item ao carrinho';
+      return CartResult.error(errorMessage);
     }
   }
 }
