@@ -7,14 +7,18 @@ import 'package:green_grocer/src/services/token_servicer.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class CartController extends GetxController {
-  // Variables
+  // Gloabal Variables
   bool isFetching = false;
   List<CartItemModel> cartItems = [];
 
-  // Instances
-  final CartRepository cartRepository = CartRepository();
-  final TokenService tokenService = TokenService();
-  final UtilsServices utilsService = UtilsServices();
+  // Private Instances
+  final CartRepository _cartRepository = CartRepository();
+  final TokenService _tokenService = TokenService();
+  final UtilsServices _utilsService = UtilsServices();
+
+  // Private Variables
+  String? _userId;
+  String? _token;
 
   @override
   void onInit() {
@@ -23,40 +27,14 @@ class CartController extends GetxController {
     cartTotalPrice();
   }
 
-  void setLoading({required bool isLoading}) {
+  void _setLoading({required bool isLoading}) {
     isFetching = isLoading;
     update();
   }
 
-  Future<void> getCartItems() async {
-    setLoading(isLoading: true);
-
-    String? userId = await tokenService.readData(key: StorageKeys.userId);
-    String? token =
-        await tokenService.readData(key: StorageKeys.tokenGreenGrocer);
-
-    final CartResult<List<CartItemModel>> result =
-        await cartRepository.getCartItems(
-      token: token!,
-      userId: userId!,
-    );
-
-    setLoading(isLoading: false);
-
-    result.when(
-      success: (data) {
-        // print('data $data');
-        cartItems = data;
-        update();
-      },
-      error: (message) {
-        print(message);
-        utilsService.showToast(
-          message: message,
-          isError: true,
-        );
-      },
-    );
+  Future<void> _getUserValues() async {
+    _userId = await _tokenService.readData(key: StorageKeys.userId);
+    _token = await _tokenService.readData(key: StorageKeys.tokenGreenGrocer);
   }
 
   double cartTotalPrice() {
@@ -69,5 +47,39 @@ class CartController extends GetxController {
     }
 
     return totalPrice;
+  }
+
+  Future<void> getCartItems() async {
+    _setLoading(isLoading: true);
+
+    await _getUserValues();
+
+    final CartResult<List<CartItemModel>> result =
+        await _cartRepository.getCartItems(
+      token: _token!,
+      userId: _userId!,
+    );
+
+    _setLoading(isLoading: false);
+
+    result.when(
+      success: (data) {
+        // print('data $data');
+        cartItems = data;
+        update();
+      },
+      error: (message) {
+        print(message);
+        _utilsService.showToast(
+          message: message,
+          isError: true,
+        );
+      },
+    );
+  }
+
+  void addItemToCart() {
+    print('user_id: $_userId');
+    print('token: $_token');
   }
 }

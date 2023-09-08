@@ -34,4 +34,29 @@ class CartRepository {
       return CartResult.error(errorMessage);
     }
   }
+
+  Future<void> addItemToCart({
+    required String token,
+    required String userId,
+    required String quantity,
+    required String productId,
+  }) async {
+    final result = await _httpManager.restRequest(
+        url: EndPoint.addItemToCart,
+        method: HttpMethods.post,
+        headers: {
+          'X-Parse-Session-Token': token
+        },
+        body: {
+          "user": userId,
+          "qauntity": quantity,
+          "productId": productId,
+        });
+
+    if (result['status'] == 200) {
+      print(result);
+    } else {
+      print(result['error']);
+    }
+  }
 }
