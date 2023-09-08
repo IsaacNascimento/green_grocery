@@ -115,6 +115,7 @@ class CartController extends GetxController {
         },
         error: (error) {
           print('(addItemToCart) error: $error');
+          _utilsService.showToast(message: error, isError: true);
         },
       );
     }
