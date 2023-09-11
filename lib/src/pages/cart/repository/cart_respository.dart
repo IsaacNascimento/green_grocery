@@ -42,24 +42,49 @@ class CartRepository {
     required String productId,
   }) async {
     final result = await _httpManager.restRequest(
-        url: EndPoint.addItemToCart,
-        method: HttpMethods.post,
-        headers: {
-          'X-Parse-Session-Token': token
-        },
-        body: {
-          'user': userId,
-          'quantity': quantity,
-          'productId': productId,
-        });
+      url: EndPoint.addItemToCart,
+      method: HttpMethods.post,
+      headers: {'X-Parse-Session-Token': token},
+      body: {
+        'user': userId,
+        'quantity': quantity,
+        'productId': productId,
+      },
+    );
 
     if (result['status'] == 200) {
-      print(result);
+      // print(result);
       return CartResult<String>.success(result['result']['id']);
     } else {
-      print(result['error']);
+      // print(result['error']);
       String errorMessage = 'Não foi possível adicionar o item ao carrinho';
       return CartResult.error(errorMessage);
+    }
+  }
+
+  Future<bool> modifyItemQuantity({
+    required String token,
+    required int quantity,
+    required String cartItemId,
+  }) async {
+    final result = await _httpManager.restRequest(
+      url: EndPoint.modifyItemQuantity,
+      method: HttpMethods.post,
+      headers: {
+        'X-Parse-Session-Token': token,
+      },
+      body: {
+        'quantity': quantity,
+        'cartItemId': cartItemId,
+      },
+    );
+
+    if (result['status'] == 200) {
+      // print('(repository) result: ${result['result']}');
+      return true;
+    } else {
+      // print('(repository) error: ${result['erro']}');
+      return false;
     }
   }
 }

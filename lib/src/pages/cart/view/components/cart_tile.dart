@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/models/cart/cart_item_model.dart';
+import 'package:green_grocer/src/pages/product/product_screen.dart';
 import 'package:green_grocer/src/pages/widgets/quantity_widgets.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
@@ -26,10 +27,19 @@ class _CartTileState extends State<CartTile> {
       ),
       child: ListTile(
         // imagem
-        leading: Image.network(
-          widget.cartItem.item.picture,
-          height: 60,
-          width: 60,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProductScreen(item: widget.cartItem.item),
+              ),
+            );
+          },
+          child: Image.network(
+            widget.cartItem.item.picture,
+            height: 60,
+            width: 60,
+          ),
         ),
 
         // Titulo

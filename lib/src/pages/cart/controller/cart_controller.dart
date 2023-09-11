@@ -80,27 +80,34 @@ class CartController extends GetxController {
   }
 
   int _getItemIndex(ProductItemModel item) {
-    return cartItems.indexWhere((itemInList) => itemInList.id == item.id);
+    return cartItems.indexWhere((itemInList) => itemInList.item.id == item.id);
   }
 
-  Future<void> addItemToCart(
-      {required ProductItemModel item, int quantity = 1}) async {
+  Future<void> addItemToCart({
+    required ProductItemModel item,
+    required int quantity,
+  }) async {
     int itemIndex = _getItemIndex(item);
 
     if (itemIndex >= 0) {
       // Item Já existe no carrinho
 
-      cartItems[itemIndex].quantity += quantity;
+      final CartItemModel cartItem = cartItems[itemIndex];
+
+      final bool result = await modifyItemQuantity(
+        quantity: (cartItem.quantity + quantity),
+        cartItem: cartItem,
+      );
+
+      if (result) {
+        cartItems[itemIndex].quantity += quantity;
+      } else {
+        String errorMessage = 'Não foi possível modificar a quantidade do item';
+        _utilsService.showToast(message: errorMessage, isError: true);
+      }
     } else {
       // Novo item;
-
-      cartItems.add(
-        CartItemModel(
-          id: '',
-          item: item,
-          quantity: quantity,
-        ),
-      );
+      _setLoading(isLoading: true);
 
       final CartResult<String> result = await _cartRepository.addItemToCart(
         token: _token!,
@@ -109,16 +116,42 @@ class CartController extends GetxController {
         productId: item.id,
       );
 
+      _setLoading(isLoading: false);
+
       result.when(
         success: (data) {
-          print('(addItemToCart) data: $data');
+          // print('(addItemToCart) data: $data');
+          cartItems.add(
+            CartItemModel(
+              id: data,
+              item: item,
+              quantity: quantity,
+            ),
+          );
         },
         error: (error) {
-          print('(addItemToCart) error: $error');
+          // print('(addItemToCart) error: $error');
           _utilsService.showToast(message: error, isError: true);
         },
       );
     }
     update();
+  }
+
+  Future<bool> modifyItemQuantity({
+    required int quantity,
+    required CartItemModel cartItem,
+  }) async {
+    _setLoading(isLoading: true);
+
+    final bool result = await _cartRepository.modifyItemQuantity(
+      token: _token!,
+      quantity: quantity,
+      cartItemId: cartItem.id,
+    );
+
+    _setLoading(isLoading: false);
+
+    return result;
   }
 }
