@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/models/cart/cart_item_model.dart';
+import 'package:green_grocer/src/pages/cart/controller/cart_controller.dart';
 import 'package:green_grocer/src/pages/widgets/quantity_widgets.dart';
 import 'package:green_grocer/src/routes/app_pages.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class CartTile extends StatefulWidget {
   final CartItemModel cartItem;
-  final Function(CartItemModel) remove;
 
-  const CartTile({super.key, required this.cartItem, required this.remove});
+  const CartTile({super.key, required this.cartItem});
 
   @override
   State<CartTile> createState() => _CartTileState();
@@ -18,6 +18,7 @@ class CartTile extends StatefulWidget {
 
 class _CartTileState extends State<CartTile> {
   final UtilsServices utilsServices = UtilsServices();
+  final _controller = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +61,10 @@ class _CartTileState extends State<CartTile> {
           value: widget.cartItem.quantity,
           suffixText: widget.cartItem.item.unit,
           result: (quantity) {
-            setState(() {
-              widget.cartItem.quantity = quantity;
-
-              if (quantity == 0) {
-                //  remove(widget.cartItem.item);
-                widget.remove(widget.cartItem);
-              }
-            });
+            _controller.modifyItemQuantity(
+              quantity: quantity,
+              cartItem: widget.cartItem,
+            );
           },
           isRemovable: true,
         ),

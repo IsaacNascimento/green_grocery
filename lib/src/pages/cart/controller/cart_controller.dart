@@ -94,17 +94,10 @@ class CartController extends GetxController {
 
       final CartItemModel cartItem = cartItems[itemIndex];
 
-      final bool result = await modifyItemQuantity(
+      await modifyItemQuantity(
         quantity: (cartItem.quantity + quantity),
         cartItem: cartItem,
       );
-
-      if (result) {
-        cartItems[itemIndex].quantity += quantity;
-      } else {
-        String errorMessage = 'Não foi possível modificar a quantidade do item';
-        _utilsService.showToast(message: errorMessage, isError: true);
-      }
     } else {
       // Novo item;
       _setLoading(isLoading: true);
@@ -142,7 +135,8 @@ class CartController extends GetxController {
     required int quantity,
     required CartItemModel cartItem,
   }) async {
-    _setLoading(isLoading: true);
+    // _setLoading(isLoading: true);
+    // print('(cart Controller) Modify quantity: $quantity, CartItem: $cartItem');
 
     final bool result = await _cartRepository.modifyItemQuantity(
       token: _token!,
@@ -150,7 +144,23 @@ class CartController extends GetxController {
       cartItemId: cartItem.id,
     );
 
-    _setLoading(isLoading: false);
+    // print('(cart Controller) result: $result');
+
+    if (result) {
+      if (quantity == 0) {
+        cartItems.removeWhere((element) => element.id == cartItem.id);
+      } else {
+        cartItems.firstWhere((element) => element.id == cartItem.id).quantity =
+            quantity;
+      }
+
+      update();
+    } else {
+      String errorMessage = 'Não foi possível modificar a quantidade do item';
+      _utilsService.showToast(message: errorMessage, isError: true);
+    }
+
+    // _setLoading(isLoading: false);
 
     return result;
   }

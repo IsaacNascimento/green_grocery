@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
-import 'package:green_grocer/src/models/cart/cart_item_model.dart';
+import 'package:green_grocer/src/pages/base/controller/navigation_controller.dart';
 import 'package:green_grocer/src/pages/cart/view/components/cart_tile.dart';
 import 'package:green_grocer/src/pages/widgets/payment_dialog.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
@@ -18,15 +18,7 @@ class CartTab extends StatefulWidget {
 class _CartTabState extends State<CartTab> {
   final UtilsServices utilsServices = UtilsServices();
   final cartController = Get.find<CartController>().getCartItems();
-
-  void removeItemFromCart(CartItemModel cartItem) {
-    setState(() {
-      app_data.cartItems.remove(cartItem);
-
-      utilsServices.showToast(
-          message: '${cartItem.item.title} removido(A) do Carrinho');
-    });
-  }
+  final _navigateController = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +37,39 @@ class _CartTabState extends State<CartTab> {
                       ),
                     )
                   : Expanded(
-                      child: ListView.builder(
-                        itemCount: controller.cartItems.length,
-                        itemBuilder: (_, index) {
-                          return CartTile(
-                            cartItem: controller.cartItems[index],
-                            remove: removeItemFromCart,
-                          );
-                        },
+                      child: Visibility(
+                        visible: (controller.cartItems).isNotEmpty,
+                        replacement: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.remove_shopping_cart_sharp,
+                              size: 25,
+                              color: CustomColors.customSwatchColor,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              'Ainda não há produtos adicionados no Carrinho',
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                _navigateController
+                                    .navigatePageView(NavigationTabas.home);
+                              },
+                              child: const Text('Explorar Loja'),
+                            ),
+                          ],
+                        ),
+                        child: ListView.builder(
+                          itemCount: controller.cartItems.length,
+                          itemBuilder: (_, index) {
+                            return CartTile(
+                              cartItem: controller.cartItems[index],
+                            );
+                          },
+                        ),
                       ),
                     );
             },
