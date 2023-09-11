@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/models/product/product_item_model.dart';
+import 'package:green_grocer/src/pages/cart/controller/cart_controller.dart';
 import 'package:green_grocer/src/routes/app_pages.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
@@ -11,6 +12,7 @@ class ItemTile extends StatelessWidget {
   ItemTile({super.key, required this.item});
 
   final UtilsServices utilsServices = UtilsServices();
+  final _cartController = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +81,17 @@ class ItemTile extends StatelessWidget {
           top: 4,
           right: 4,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              await _cartController.addItemToCart(item: item);
+            },
             child: Container(
               decoration: BoxDecoration(
-                  color: CustomColors.customSwatchColor,
-                  borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      topRight: Radius.circular(20))),
+                color: CustomColors.customSwatchColor,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(15),
+                  topRight: Radius.circular(20),
+                ),
+              ),
               height: 40,
               width: 35,
               child: const Icon(Icons.add_shopping_cart_outlined,

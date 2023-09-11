@@ -8,7 +8,7 @@ import 'package:green_grocer/src/services/token_servicer.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class CartController extends GetxController {
-  // Gloabal Variables
+  // Global Variables
   bool isFetching = false;
   List<CartItemModel> cartItems = [];
 
@@ -85,9 +85,10 @@ class CartController extends GetxController {
 
   Future<void> addItemToCart({
     required ProductItemModel item,
-    required int quantity,
+    int quantity = 1,
   }) async {
     int itemIndex = _getItemIndex(item);
+    // print('item: ${item.title}, itemIndex: $itemIndex');
 
     if (itemIndex >= 0) {
       // Item Já existe no carrinho
@@ -149,18 +150,19 @@ class CartController extends GetxController {
     if (result) {
       if (quantity == 0) {
         cartItems.removeWhere((element) => element.id == cartItem.id);
+        update();
       } else {
         cartItems.firstWhere((element) => element.id == cartItem.id).quantity =
             quantity;
+        update();
       }
-
-      update();
     } else {
       String errorMessage = 'Não foi possível modificar a quantidade do item';
       _utilsService.showToast(message: errorMessage, isError: true);
     }
 
     // _setLoading(isLoading: false);
+    // print('2º is Button Enable: $isButtonEnable');
 
     return result;
   }

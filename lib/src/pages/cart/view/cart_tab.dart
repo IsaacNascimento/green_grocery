@@ -44,14 +44,14 @@ class _CartTabState extends State<CartTab> {
                           children: [
                             Icon(
                               Icons.remove_shopping_cart_sharp,
-                              size: 25,
+                              size: 30,
                               color: CustomColors.customSwatchColor,
                             ),
                             const SizedBox(
                               height: 10,
                             ),
                             const Text(
-                              'Ainda não há produtos adicionados no Carrinho',
+                              'Não há produtos adicionados no Carrinho',
                             ),
                             TextButton(
                               onPressed: () {
