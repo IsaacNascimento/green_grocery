@@ -114,34 +114,41 @@ class _CartTabState extends State<CartTab> {
                 ),
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.customSwatchColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                  child: GetBuilder<CartController>(builder: (controller) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.customSwatchColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
                       ),
-                    ),
-                    onPressed: () async {
-                      bool? result = await showOrderConfirmation();
+                      onPressed: controller.cartItems.isEmpty
+                          ? null
+                          : () async {
+                              bool? result = await showOrderConfirmation();
 
-                      if (result ?? false) {
-                        if (!mounted) return;
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return PaymentDialog(
-                                  order: app_data.orders.first);
-                            });
-                      } else {
-                        utilsServices.showToast(
-                            message: 'Pedido não confirmado', isError: true);
-                      }
-                    },
-                    child: const Text(
-                      'Concluir Pedido',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
+                              if (result ?? false) {
+                                if (!mounted) return;
+                                showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return PaymentDialog(
+                                          order: app_data.orders.first);
+                                    });
+                              } else {
+                                utilsServices.showToast(
+                                    message: 'Pedido não confirmado',
+                                    isError: true);
+                              }
+                            },
+                      child: Text(
+                        controller.cartItems.isEmpty
+                            ? 'Carrinho Vazio'
+                            : 'Concluir Pedido',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),

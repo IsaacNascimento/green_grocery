@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/models/product/product_item_model.dart';
-import 'package:green_grocer/src/pages/base/controller/navigation_controller.dart';
 import 'package:green_grocer/src/pages/cart/controller/cart_controller.dart';
 import 'package:green_grocer/src/pages/widgets/quantity_widgets.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
@@ -21,8 +20,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
   int cartItemQuantity = 1;
 
-  final navigationController = Get.find<NavigationController>();
-  final cartController = Get.find<CartController>();
+  final _cartController = Get.find<CartController>();
+  final UtilsServices _utilsService = UtilsServices();
 
   @override
   Widget build(BuildContext context) {
@@ -113,19 +112,18 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                           onPressed: () {
                             // Fechar
-                            Get.back();
+                            // Get.back();
 
-                            cartController.addItemToCart(
+                            _cartController.addItemToCart(
                               item: widget.item,
                               quantity: cartItemQuantity,
                             );
 
-                            // Carrinho
-                            navigationController
-                                .navigatePageView(NavigationTabas.cart);
+                            _utilsService.showToast(
+                                message: 'Produto Adicionado com Sucesso!');
                           },
                           label: const Text(
-                            'Add no Carrinho',
+                            'Adicionar ao Carrinho',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

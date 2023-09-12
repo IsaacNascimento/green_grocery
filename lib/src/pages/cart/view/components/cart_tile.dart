@@ -22,53 +22,76 @@ class _CartTileState extends State<CartTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: ListTile(
-        // imagem
-        leading: GestureDetector(
-          onTap: () {
-            Get.toNamed(PagesRoutes.productRoute,
-                arguments: widget.cartItem.item);
-          },
-          child: Image.network(
-            widget.cartItem.item.picture,
-            height: 60,
-            width: 60,
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Conteudo
+        Opacity(
+          opacity: _controller.isQuantityChange &&
+                  widget.cartItem.id == _controller.cartIdSelectedToModify
+              ? 0.3
+              : 1,
+          child: Card(
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ListTile(
+              // imagem
+              leading: GestureDetector(
+                onTap: () {
+                  Get.toNamed(PagesRoutes.productRoute,
+                      arguments: widget.cartItem.item);
+                },
+                child: Image.network(
+                  widget.cartItem.item.picture,
+                  height: 60,
+                  width: 60,
+                ),
+              ),
+
+              // Titulo
+              title: Text(
+                widget.cartItem.item.title,
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+
+              // Total
+              subtitle: Text(
+                utilsServices.priceToCurrency(widget.cartItem.totalPrice()),
+                style: TextStyle(
+                  color: CustomColors.customSwatchColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              // Quantidade
+              trailing: QuantityWidget(
+                value: widget.cartItem.quantity,
+                suffixText: widget.cartItem.item.unit,
+                result: (quantity) {
+                  _controller.modifyItemQuantity(
+                    quantity: quantity,
+                    cartItem: widget.cartItem,
+                  );
+                },
+                isRemovable: true,
+              ),
+            ),
           ),
         ),
 
-        // Titulo
-        title: Text(
-          widget.cartItem.item.title,
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
-
-        // Total
-        subtitle: Text(
-          utilsServices.priceToCurrency(widget.cartItem.totalPrice()),
-          style: TextStyle(
-            color: CustomColors.customSwatchColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-
-        // Quantidade
-        trailing: QuantityWidget(
-          value: widget.cartItem.quantity,
-          suffixText: widget.cartItem.item.unit,
-          result: (quantity) {
-            _controller.modifyItemQuantity(
-              quantity: quantity,
-              cartItem: widget.cartItem,
-            );
-          },
-          isRemovable: true,
-        ),
-      ),
+        // Progress Indicator - Loading (Checar se o item atual é igual ao Item Selecionado)
+        _controller.isQuantityChange &&
+                widget.cartItem.id == _controller.cartIdSelectedToModify
+            ? const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 80),
+                child: LinearProgressIndicator(
+                  minHeight: 3,
+                ),
+              )
+            : const SizedBox(height: 0, width: 0),
+      ],
     );
   }
 }

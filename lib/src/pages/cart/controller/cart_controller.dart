@@ -10,6 +10,8 @@ import 'package:green_grocer/src/services/utils_services.dart';
 class CartController extends GetxController {
   // Global Variables
   bool isFetching = false;
+  bool isQuantityChange = false;
+  String cartIdSelectedToModify = '';
   List<CartItemModel> cartItems = [];
 
   // Private Instances
@@ -28,8 +30,12 @@ class CartController extends GetxController {
     cartTotalPrice();
   }
 
-  void _setLoading({required bool isLoading}) {
-    isFetching = isLoading;
+  void _setLoading({required bool isLoading, bool isProduct = false}) {
+    if (isProduct) {
+      isQuantityChange = isLoading;
+    } else {
+      isFetching = isLoading;
+    }
     update();
   }
 
@@ -136,7 +142,8 @@ class CartController extends GetxController {
     required int quantity,
     required CartItemModel cartItem,
   }) async {
-    // _setLoading(isLoading: true);
+    cartIdSelectedToModify = cartItem.id;
+    _setLoading(isLoading: true, isProduct: true);
     // print('(cart Controller) Modify quantity: $quantity, CartItem: $cartItem');
 
     final bool result = await _cartRepository.modifyItemQuantity(
@@ -161,7 +168,7 @@ class CartController extends GetxController {
       _utilsService.showToast(message: errorMessage, isError: true);
     }
 
-    // _setLoading(isLoading: false);
+    _setLoading(isLoading: false, isProduct: true);
     // print('2º is Button Enable: $isButtonEnable');
 
     return result;
