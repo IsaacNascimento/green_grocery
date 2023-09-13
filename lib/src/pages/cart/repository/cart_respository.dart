@@ -9,16 +9,12 @@ class CartRepository {
 
   // Método asyncrono; Que retorna um CartResult, com uma Lista de CartItemModel
   Future<CartResult<List<CartItemModel>>> getCartItems({
-    required String token,
     required String userId,
   }) async {
     // print("(repository) => user id: $userId, user token: $token");
     final result = await _httpManager.restRequest(
         url: EndPoint.cartItemsList,
         method: HttpMethods.post,
-        headers: {
-          'X-Parse-Session-Token': token
-        },
         body: {
           'user': userId,
         });
@@ -37,7 +33,6 @@ class CartRepository {
   }
 
   Future<CartResult<String>> addItemToCart({
-    required String token,
     required String userId,
     required int quantity,
     required String productId,
@@ -45,7 +40,6 @@ class CartRepository {
     final result = await _httpManager.restRequest(
       url: EndPoint.addItemToCart,
       method: HttpMethods.post,
-      headers: {'X-Parse-Session-Token': token},
       body: {
         'user': userId,
         'quantity': quantity,
@@ -64,16 +58,12 @@ class CartRepository {
   }
 
   Future<bool> modifyItemQuantity({
-    required String token,
     required int quantity,
     required String cartItemId,
   }) async {
     final result = await _httpManager.restRequest(
       url: EndPoint.modifyItemQuantity,
       method: HttpMethods.post,
-      headers: {
-        'X-Parse-Session-Token': token,
-      },
       body: {
         'quantity': quantity,
         'cartItemId': cartItemId,
@@ -90,15 +80,11 @@ class CartRepository {
   }
 
   Future<CartResult<OrderModel>> checkoutOrder({
-    required String token,
     required double totalCartPrice,
   }) async {
     final result = await _httpManager.restRequest(
       url: EndPoint.checkoutOrder,
       method: HttpMethods.post,
-      headers: {
-        'X-Parse-Session-Token': token,
-      },
       body: {'total': totalCartPrice},
     );
 

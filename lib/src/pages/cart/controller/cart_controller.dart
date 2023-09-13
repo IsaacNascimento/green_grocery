@@ -32,7 +32,6 @@ class CartController extends GetxController {
 
   // Private Variables
   String? _userId;
-  String? _token;
 
   @override
   void onInit() {
@@ -62,7 +61,6 @@ class CartController extends GetxController {
 
   Future<void> _getUserValues() async {
     _userId = await _tokenService.readData(key: StorageKeys.userId);
-    _token = await _tokenService.readData(key: StorageKeys.tokenGreenGrocer);
   }
 
   double cartTotalPrice() {
@@ -84,7 +82,6 @@ class CartController extends GetxController {
 
     final CartResult<List<CartItemModel>> result =
         await _cartRepository.getCartItems(
-      token: _token!,
       userId: _userId!,
     );
 
@@ -131,7 +128,6 @@ class CartController extends GetxController {
       _setLoading(isLoading: true, loadingName: LoadingsNames.isFetching);
 
       final CartResult<String> result = await _cartRepository.addItemToCart(
-        token: _token!,
         userId: _userId!,
         quantity: quantity,
         productId: item.id,
@@ -168,7 +164,6 @@ class CartController extends GetxController {
     // print('(cart Controller) Modify quantity: $quantity, CartItem: $cartItem');
 
     final bool result = await _cartRepository.modifyItemQuantity(
-      token: _token!,
       quantity: quantity,
       cartItemId: cartItem.id,
     );
@@ -200,7 +195,6 @@ class CartController extends GetxController {
 
     final double totalCartPrice = cartTotalPrice();
     final CartResult<OrderModel> result = await _cartRepository.checkoutOrder(
-      token: _token!,
       totalCartPrice: totalCartPrice,
     );
 
