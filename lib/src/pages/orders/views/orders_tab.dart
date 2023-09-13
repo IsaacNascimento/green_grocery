@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:green_grocer/src/config/app_data.dart' as app_data;
+import 'package:get/get.dart';
+import 'package:green_grocer/src/pages/orders/controller/order_controller.dart';
 import 'package:green_grocer/src/pages/orders/views/components/order_tile.dart';
 
 class OrdersTab extends StatelessWidget {
-  const OrdersTab({super.key});
+  OrdersTab({super.key});
+  final ordersController = Get.find<OrderController>().getOrdesLists();
 
   @override
   Widget build(BuildContext context) {
@@ -11,20 +13,24 @@ class OrdersTab extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Pedidos'),
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        physics: const BouncingScrollPhysics(),
-        separatorBuilder: (_, index) {
-          return const SizedBox(
-            height: 10,
+      body: GetBuilder<OrderController>(
+        builder: (controller) {
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            physics: const BouncingScrollPhysics(),
+            separatorBuilder: (_, index) {
+              return const SizedBox(
+                height: 10,
+              );
+            },
+            itemBuilder: (_, index) {
+              return OrderTile(
+                order: controller.orders[index],
+              );
+            },
+            itemCount: controller.orders.length,
           );
         },
-        itemBuilder: (_, index) {
-          return OrderTile(
-            order: app_data.orders[index],
-          );
-        },
-        itemCount: app_data.orders.length,
       ),
     );
   }

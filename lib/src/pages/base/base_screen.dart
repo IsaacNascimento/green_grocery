@@ -26,7 +26,7 @@ class _BaseScreenState extends State<BaseScreen> {
         children: [
           const HomeTab(),
           const CartTab(),
-          const OrdersTab(),
+          OrdersTab(),
           ProfileTab(),
         ],
       ),

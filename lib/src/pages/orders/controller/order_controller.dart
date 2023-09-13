@@ -20,6 +20,13 @@ class OrderController extends GetxController {
   final _utilsService = UtilsServices();
 
   // Methods
+  @override
+  void onInit() {
+    super.onInit();
+
+    getOrdesLists();
+  }
+
   void _setIsLoading({required bool isLoading}) {
     isFetching = isLoading;
     update();
@@ -32,7 +39,7 @@ class OrderController extends GetxController {
   Future<void> getOrdesLists() async {
     _setIsLoading(isLoading: true);
 
-    _getUserId();
+    await _getUserId();
     final OrderResult<List<OrderModel>> result =
         await _orderRepository.getOrdesLists(
       userId: _userId!,
