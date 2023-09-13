@@ -1,16 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_grocer/src/constants/storage_keys.dart';
 import 'package:green_grocer/src/models/cart/cart_item_model.dart';
+import 'package:green_grocer/src/models/order/order_item_model.dart';
 import 'package:green_grocer/src/models/product/product_item_model.dart';
 import 'package:green_grocer/src/pages/cart/repository/cart_respository.dart';
 import 'package:green_grocer/src/pages/cart/result/cart_result.dart';
 import 'package:green_grocer/src/services/token_servicer.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
+import '../../widgets/payment_dialog.dart';
+
+abstract class LoadingsNames {
+  static const String isFetching = 'FETCHING';
+  static const String isQuantity = 'QUANTITY';
+  static const String isCheckout = 'CHECKOUT';
+}
+
 class CartController extends GetxController {
   // Global Variables
   bool isFetching = false;
   bool isQuantityChange = false;
+  bool isCheckoutLoading = false;
   String cartIdSelectedToModify = '';
   List<CartItemModel> cartItems = [];
 
@@ -30,13 +41,23 @@ class CartController extends GetxController {
     cartTotalPrice();
   }
 
-  void _setLoading({required bool isLoading, bool isProduct = false}) {
-    if (isProduct) {
-      isQuantityChange = isLoading;
-    } else {
-      isFetching = isLoading;
+  void _setLoading({required bool isLoading, required String loadingName}) {
+    switch (loadingName) {
+      case LoadingsNames.isFetching:
+        isFetching = isLoading;
+        update();
+        break;
+      case LoadingsNames.isQuantity:
+        isQuantityChange = isLoading;
+        update();
+        break;
+      case LoadingsNames.isCheckout:
+        isCheckoutLoading = isLoading;
+        update();
+        break;
+      default:
+        '';
     }
-    update();
   }
 
   Future<void> _getUserValues() async {
@@ -57,7 +78,7 @@ class CartController extends GetxController {
   }
 
   Future<void> getCartItems() async {
-    _setLoading(isLoading: true);
+    _setLoading(isLoading: true, loadingName: LoadingsNames.isFetching);
 
     await _getUserValues();
 
@@ -67,7 +88,7 @@ class CartController extends GetxController {
       userId: _userId!,
     );
 
-    _setLoading(isLoading: false);
+    _setLoading(isLoading: false, loadingName: LoadingsNames.isFetching);
 
     result.when(
       success: (data) {
@@ -107,7 +128,7 @@ class CartController extends GetxController {
       );
     } else {
       // Novo item;
-      _setLoading(isLoading: true);
+      _setLoading(isLoading: true, loadingName: LoadingsNames.isFetching);
 
       final CartResult<String> result = await _cartRepository.addItemToCart(
         token: _token!,
@@ -116,7 +137,7 @@ class CartController extends GetxController {
         productId: item.id,
       );
 
-      _setLoading(isLoading: false);
+      _setLoading(isLoading: false, loadingName: LoadingsNames.isFetching);
 
       result.when(
         success: (data) {
@@ -143,7 +164,7 @@ class CartController extends GetxController {
     required CartItemModel cartItem,
   }) async {
     cartIdSelectedToModify = cartItem.id;
-    _setLoading(isLoading: true, isProduct: true);
+    _setLoading(isLoading: true, loadingName: LoadingsNames.isQuantity);
     // print('(cart Controller) Modify quantity: $quantity, CartItem: $cartItem');
 
     final bool result = await _cartRepository.modifyItemQuantity(
@@ -168,9 +189,40 @@ class CartController extends GetxController {
       _utilsService.showToast(message: errorMessage, isError: true);
     }
 
-    _setLoading(isLoading: false, isProduct: true);
+    _setLoading(isLoading: false, loadingName: LoadingsNames.isQuantity);
     // print('2º is Button Enable: $isButtonEnable');
 
     return result;
+  }
+
+  Future checkoutOrder() async {
+    _setLoading(isLoading: true, loadingName: LoadingsNames.isCheckout);
+
+    final double totalCartPrice = cartTotalPrice();
+    final CartResult<OrderModel> result = await _cartRepository.checkoutOrder(
+      token: _token!,
+      totalCartPrice: totalCartPrice,
+    );
+
+    _setLoading(isLoading: false, loadingName: LoadingsNames.isCheckout);
+
+    result.when(
+      success: (data) {
+        cartItems.clear();
+        update();
+
+        showDialog(
+          context: Get.context!,
+          builder: (_) {
+            return PaymentDialog(order: data);
+          },
+        );
+      },
+      error: (error) {
+        _utilsService.showToast(
+          message: error,
+        );
+      },
+    );
   }
 }

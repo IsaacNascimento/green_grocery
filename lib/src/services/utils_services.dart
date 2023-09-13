@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -26,5 +29,11 @@ class UtilsServices {
       textColor: isError ? Colors.white : Colors.black,
       fontSize: 16.0,
     );
+  }
+
+  Uint8List decodeQrCodeImage(String value) {
+    String base64String = value.split(',').last;
+
+    return base64Decode(base64String);
   }
 }

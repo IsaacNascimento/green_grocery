@@ -12,7 +12,12 @@ abstract class EndPoint {
   static const String productList = '$baseUrl/get-product-list';
 
   // CART
-  static const String getCartItems = '$baseUrl/get-cart-items';
+  static const String cartItemsList = '$baseUrl/get-cart-items';
   static const String addItemToCart = '$baseUrl/add-item-to-cart';
   static const String modifyItemQuantity = '$baseUrl/modify-item-quantity';
+
+  // ORDER
+  static const String checkoutOrder = '$baseUrl/checkout';
+  static const String ordersList = '$baseUrl/get-orders';
+  static const String itemsOrdersList = '$baseUrl/get-order-items';
 }

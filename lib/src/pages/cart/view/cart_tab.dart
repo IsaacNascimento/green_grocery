@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:green_grocer/src/config/custom_colors.dart';
 import 'package:green_grocer/src/pages/base/controller/navigation_controller.dart';
 import 'package:green_grocer/src/pages/cart/view/components/cart_tile.dart';
-import 'package:green_grocer/src/pages/widgets/payment_dialog.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
-import 'package:green_grocer/src/config/app_data.dart' as app_data;
 import 'package:green_grocer/src/pages/cart/controller/cart_controller.dart';
 import 'package:get/get.dart';
 
@@ -122,31 +120,27 @@ class _CartTabState extends State<CartTab> {
                           borderRadius: BorderRadius.circular(18),
                         ),
                       ),
-                      onPressed: controller.cartItems.isEmpty
+                      onPressed: controller.cartItems.isEmpty ||
+                              controller.isCheckoutLoading
                           ? null
                           : () async {
                               bool? result = await showOrderConfirmation();
 
                               if (result ?? false) {
-                                if (!mounted) return;
-                                showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return PaymentDialog(
-                                          order: app_data.orders.first);
-                                    });
+                                await controller.checkoutOrder();
                               } else {
                                 utilsServices.showToast(
-                                    message: 'Pedido não confirmado',
-                                    isError: true);
+                                    message: 'Pedido não confirmado');
                               }
                             },
-                      child: Text(
-                        controller.cartItems.isEmpty
-                            ? 'Carrinho Vazio'
-                            : 'Concluir Pedido',
-                        style: const TextStyle(fontSize: 18),
-                      ),
+                      child: controller.isCheckoutLoading
+                          ? const CircularProgressIndicator()
+                          : Text(
+                              controller.cartItems.isEmpty
+                                  ? 'Carrinho Vazio'
+                                  : 'Concluir Pedido',
+                              style: const TextStyle(fontSize: 18),
+                            ),
                     );
                   }),
                 ),

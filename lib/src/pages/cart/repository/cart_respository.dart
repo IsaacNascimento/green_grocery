@@ -1,5 +1,6 @@
 import 'package:green_grocer/src/constants/endpoints.dart';
 import 'package:green_grocer/src/models/cart/cart_item_model.dart';
+import 'package:green_grocer/src/models/order/order_item_model.dart';
 import 'package:green_grocer/src/pages/cart/result/cart_result.dart';
 import 'package:green_grocer/src/services/http_manager.dart';
 
@@ -13,7 +14,7 @@ class CartRepository {
   }) async {
     // print("(repository) => user id: $userId, user token: $token");
     final result = await _httpManager.restRequest(
-        url: EndPoint.getCartItems,
+        url: EndPoint.cartItemsList,
         method: HttpMethods.post,
         headers: {
           'X-Parse-Session-Token': token
@@ -85,6 +86,30 @@ class CartRepository {
     } else {
       // print('(repository) error: ${result['erro']}');
       return false;
+    }
+  }
+
+  Future<CartResult<OrderModel>> checkoutOrder({
+    required String token,
+    required double totalCartPrice,
+  }) async {
+    final result = await _httpManager.restRequest(
+      url: EndPoint.checkoutOrder,
+      method: HttpMethods.post,
+      headers: {
+        'X-Parse-Session-Token': token,
+      },
+      body: {'total': totalCartPrice},
+    );
+
+    if (result['status'] == 200) {
+      print('(order repository) - success: ${result['result']}');
+      final order = OrderModel.fromJson(result['result']);
+      return CartResult<OrderModel>.success(order);
+    } else {
+      print('(order repository) - error: ${result['error']}');
+      String errorMessage = 'Ocorreu um erro ao realizar o pedido';
+      return CartResult.error(errorMessage);
     }
   }
 }

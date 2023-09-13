@@ -1,5 +1,5 @@
 import 'package:green_grocer/src/models/cart/cart_item_model.dart';
-import 'package:green_grocer/src/models/order_item_model.dart';
+import 'package:green_grocer/src/models/order/order_item_model.dart';
 import 'package:green_grocer/src/models/product/product_item_model.dart';
 import 'package:green_grocer/src/models/user/user_model.dart';
 
@@ -101,10 +101,12 @@ List<OrderModel> orders = [
     status: 'pending_payment',
     copyAndPaste: 'qwsq12sdf4h6',
     total: 27.50,
+    qrCodeImage: '',
   ),
 
   // Pedido 02
   OrderModel(
+    qrCodeImage: '',
     id: 'asd5mfgj4hk7',
     createdDateTime: DateTime.parse('2023-08-08 10:00:10.458'),
     overdueDateTime: DateTime.parse('2023-08-08 11:00:10.458'),
