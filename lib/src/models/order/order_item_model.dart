@@ -36,6 +36,8 @@ class OrderModel {
     required this.copyAndPaste,
   });
 
+  bool get isOverDue => overdueDateTime.isBefore(DateTime.now());
+
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);
   Map<String, dynamic> toJson() => _$OrderModelToJson(this);
