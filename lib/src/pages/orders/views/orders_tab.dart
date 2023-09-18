@@ -3,9 +3,15 @@ import 'package:get/get.dart';
 import 'package:green_grocer/src/pages/orders/controller/order_controller.dart';
 import 'package:green_grocer/src/pages/orders/views/components/order_tile.dart';
 
-class OrdersTab extends StatelessWidget {
+class OrdersTab extends StatefulWidget {
+  const OrdersTab({super.key});
+
+  @override
+  State<OrdersTab> createState() => _OrdersTabState();
+}
+
+class _OrdersTabState extends State<OrdersTab> {
   final ordersController = Get.find<OrderController>().getOrdesLists();
-  OrdersTab({super.key});
 
   @override
   Widget build(BuildContext context) {
