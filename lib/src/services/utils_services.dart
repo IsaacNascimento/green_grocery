@@ -16,7 +16,7 @@ class UtilsServices {
     initializeDateFormatting();
 
     DateFormat dateFormat = DateFormat.yMd('pt_BR').add_Hm();
-    return dateFormat.format(dateTime);
+    return dateFormat.format(dateTime.toLocal());
   }
 
   void showToast({required String message, bool isError = false}) {
