@@ -8,29 +8,37 @@ import 'package:green_grocer/src/services/token_servicer.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class AuthController extends GetxController {
+  // Public Variables
   RxBool isFetching = false.obs;
   RxBool isFetchingResetPassword = false.obs;
-
-  final authRepository = AuthRepository();
-  final UtilsServices utilsServices = UtilsServices();
-  final TokenService tokenService = TokenService();
-
+  bool isLoadingUser = false;
   UserModel currentUser = UserModel(email: '');
 
-  Future<void> validateToken() async {
+  final _authRepository = AuthRepository();
+  final UtilsServices _utilsServices = UtilsServices();
+  final TokenService _tokenService = TokenService();
+
+  Future<void> validateToken({bool navigateToBase = true}) async {
+    isLoadingUser = true;
+    update();
     // Recuperar o Token salvo localmente
     String? token =
-        await tokenService.readData(key: StorageKeys.tokenGreenGrocer);
+        await _tokenService.readData(key: StorageKeys.tokenGreenGrocer);
 
     if (token == null) {
       Get.offAllNamed(PagesRoutes.signInRoute);
     }
-    AuthResult result = await authRepository.validateToken(token!);
+    AuthResult result = await _authRepository.validateToken(token!);
+
+    isLoadingUser = false;
+    update();
 
     result.when(
       success: (user) {
         currentUser = user;
-        saveTokenAndProceedToBase();
+        if (navigateToBase) {
+          saveTokenAndProceedToBase();
+        }
       },
       error: (message) {
         signOut();
@@ -43,10 +51,10 @@ class AuthController extends GetxController {
     currentUser = UserModel(email: '');
 
     // Remover token Localmente
-    await tokenService.removeData(key: StorageKeys.tokenGreenGrocer);
+    await _tokenService.removeData(key: StorageKeys.tokenGreenGrocer);
 
     // Remover userId Localmente
-    await tokenService.removeData(key: StorageKeys.userId);
+    await _tokenService.removeData(key: StorageKeys.userId);
 
     // Navegar para Login
     Get.offAllNamed(PagesRoutes.signInRoute);
@@ -54,11 +62,11 @@ class AuthController extends GetxController {
 
   void saveTokenAndProceedToBase() {
     // Salvar o Token
-    tokenService.saveData(
+    _tokenService.saveData(
         key: StorageKeys.tokenGreenGrocer, data: currentUser.token!);
 
     // Salvar o userId
-    tokenService.saveData(key: StorageKeys.userId, data: currentUser.id!);
+    _tokenService.saveData(key: StorageKeys.userId, data: currentUser.id!);
 
     // Ir para base Screen
     Get.offAllNamed(PagesRoutes.baseRoute);
@@ -67,7 +75,7 @@ class AuthController extends GetxController {
   Future<void> signIn(UserModel user) async {
     isFetching.value = true;
 
-    AuthResult response = await authRepository.signIn(
+    AuthResult response = await _authRepository.signIn(
         email: user.email, password: user.password ?? '');
 
     isFetching.value = false;
@@ -81,7 +89,7 @@ class AuthController extends GetxController {
       },
       error: (message) {
         // print(message);
-        utilsServices.showToast(message: message, isError: true);
+        _utilsServices.showToast(message: message, isError: true);
       },
     );
   }
@@ -91,7 +99,7 @@ class AuthController extends GetxController {
 
     // print('user controller: $user');
 
-    AuthResult response = await authRepository.signUp(currentUser);
+    AuthResult response = await _authRepository.signUp(currentUser);
 
     isFetching.value = false;
 
@@ -102,7 +110,7 @@ class AuthController extends GetxController {
         saveTokenAndProceedToBase();
       },
       error: (message) {
-        utilsServices.showToast(message: message, isError: true);
+        _utilsServices.showToast(message: message, isError: true);
       },
     );
   }
@@ -110,19 +118,19 @@ class AuthController extends GetxController {
   Future<void> resetPassword({required String email}) async {
     isFetchingResetPassword.value = true;
 
-    AuthResult response = await authRepository.resetPassword(email: email);
+    AuthResult response = await _authRepository.resetPassword(email: email);
 
     isFetchingResetPassword.value = false;
 
     response.when(
       success: (user) {
         // this.user = user;
-        utilsServices.showToast(
+        _utilsServices.showToast(
           message: 'Link de recuperação enviado para $email',
         );
       },
       error: (message) {
-        utilsServices.showToast(message: message, isError: true);
+        _utilsServices.showToast(message: message, isError: true);
       },
     );
   }
