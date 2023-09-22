@@ -73,4 +73,25 @@ class AuthRepository {
       return AuthResult.error(errorMessage);
     }
   }
+
+  Future<bool> changePassword({
+    required String email,
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final result = await _httpManager.restRequest(
+        url: EndPoint.changePassword,
+        method: HttpMethods.post,
+        body: {
+          'email': email,
+          'currentPassword': currentPassword,
+          'newPassword': newPassword,
+        });
+
+    if (result['status'] == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

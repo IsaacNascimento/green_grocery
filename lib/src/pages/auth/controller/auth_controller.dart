@@ -18,9 +18,13 @@ class AuthController extends GetxController {
   final UtilsServices _utilsServices = UtilsServices();
   final TokenService _tokenService = TokenService();
 
-  Future<void> validateToken({bool navigateToBase = true}) async {
-    isLoadingUser = true;
+  void _setIsLoading({required bool isLoading}) {
+    isLoadingUser = isLoading;
     update();
+  }
+
+  Future<void> validateToken({bool navigateToBase = true}) async {
+    _setIsLoading(isLoading: true);
     // Recuperar o Token salvo localmente
     String? token =
         await _tokenService.readData(key: StorageKeys.tokenGreenGrocer);
@@ -30,8 +34,7 @@ class AuthController extends GetxController {
     }
     AuthResult result = await _authRepository.validateToken(token!);
 
-    isLoadingUser = false;
-    update();
+    _setIsLoading(isLoading: false);
 
     result.when(
       success: (user) {
@@ -133,5 +136,31 @@ class AuthController extends GetxController {
         _utilsServices.showToast(message: message, isError: true);
       },
     );
+  }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    isFetching.value = true;
+
+    final response = await _authRepository.changePassword(
+      email: currentUser.email,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+
+    isFetching.value = false;
+
+    if (response) {
+      //Mensagem
+      _utilsServices.showToast(message: 'A Senha foi atualizada com sucesso');
+
+      // Logout
+      signOut();
+    } else {
+      _utilsServices.showToast(
+          message: 'Senha atual está incorreta', isError: true);
+    }
   }
 }

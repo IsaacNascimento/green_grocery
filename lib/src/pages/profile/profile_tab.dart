@@ -97,6 +97,7 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   Future<bool?> updatePassword() {
+    final currentPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final formKey = GlobalKey<FormState>();
     return showDialog(
@@ -128,11 +129,12 @@ class _ProfileTabState extends State<ProfileTab> {
                       ),
 
                       // Senha Atual
-                      const CustomTextField(
+                      CustomTextField(
                         icon: Icons.lock,
                         label: 'Senha Atual',
                         isPasswordField: true,
                         validator: passwordValidator,
+                        controller: currentPasswordController,
                       ),
 
                       // Nova Senha
@@ -166,17 +168,29 @@ class _ProfileTabState extends State<ProfileTab> {
                       // Botão de Confirmação
                       SizedBox(
                         height: 45,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        child: Obx(
+                          () => ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
+                            onPressed: authController.isFetching.value
+                                ? null
+                                : () {
+                                    if (formKey.currentState!.validate()) {
+                                      authController.changePassword(
+                                        currentPassword:
+                                            currentPasswordController.text,
+                                        newPassword: newPasswordController.text,
+                                      );
+                                    }
+                                    // Get.back();
+                                  },
+                            child: authController.isFetching.value
+                                ? const CircularProgressIndicator()
+                                : const Text('Atualizar'),
                           ),
-                          onPressed: () {
-                            formKey.currentState!.validate();
-                            // Get.back();
-                          },
-                          child: const Text('Atualizar'),
                         ),
                       ),
                     ],
