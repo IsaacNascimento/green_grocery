@@ -7,13 +7,14 @@ import 'package:green_grocer/src/pages/home/result/home_result.dart';
 import 'package:green_grocer/src/services/utils_services.dart';
 
 class HomeController extends GetxController {
-  // Variables
+  // Global Variables
   bool isCategoryFetching = false;
   bool isProductFetching = true;
   List<CategoryItemModel> categories = [];
   CategoryItemModel? currentCategory;
   List<ProductItemModel> get products => currentCategory?.items ?? [];
 
+  SearchProductModel searchProductModel = SearchProductModel();
   RxString searchTitle = ''.obs;
 
   bool get isLastPage {
@@ -27,10 +28,9 @@ class HomeController extends GetxController {
         products.length;
   }
 
-  // Instances
-  final homeRepository = HomeRepository();
-  SearchProductModel searchProductModel = SearchProductModel();
-  final UtilsServices utilsServices = UtilsServices();
+  // Private Instances
+  final _homeRepository = HomeRepository();
+  final UtilsServices _utilsServices = UtilsServices();
 
   // Methods
   @override
@@ -76,7 +76,7 @@ class HomeController extends GetxController {
     setLoading(isLoading: true, isProduct: false);
 
     HomeResult<CategoryItemModel> result =
-        await homeRepository.getCategoryList();
+        await _homeRepository.getCategoryList();
 
     setLoading(isLoading: false, isProduct: false);
 
@@ -93,7 +93,7 @@ class HomeController extends GetxController {
       error: (message) {
         // ignore: avoid_print
         print(message);
-        utilsServices.showToast(
+        _utilsServices.showToast(
           message: message,
           isError: true,
         );
@@ -118,7 +118,7 @@ class HomeController extends GetxController {
 
     // print('currentCategory $currentCategory');
     HomeResult<ProductItemModel> result =
-        await homeRepository.getProductList(body: searchProductModel);
+        await _homeRepository.getProductList(body: searchProductModel);
 
     // print("result $result");
 
@@ -133,7 +133,7 @@ class HomeController extends GetxController {
       error: (message) {
         // ignore: avoid_print
         print(message);
-        utilsServices.showToast(message: message, isError: true);
+        _utilsServices.showToast(message: message, isError: true);
       },
     );
   }

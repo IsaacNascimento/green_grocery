@@ -9,6 +9,7 @@ import 'package:green_grocer/src/pages/home/controller/home_controller.dart';
 import 'package:green_grocer/src/pages/home/view/components/category_tile.dart';
 import 'package:green_grocer/src/pages/home/view/components/item_tile.dart';
 import 'package:green_grocer/src/pages/widgets/app_name_widget.dart';
+import 'package:green_grocer/src/pages/widgets/custom_shimmer.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -147,8 +148,26 @@ class _HomeTabState extends State<HomeTab> {
             GetBuilder<HomeController>(
               builder: (controller) {
                 return controller.isCategoryFetching
-                    ? const Center(
-                        child: CircularProgressIndicator(),
+                    ? Container(
+                        height: 15,
+                        margin: const EdgeInsets.only(left: 25),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: List.generate(
+                            8,
+                            (index) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 15),
+                                alignment: Alignment.center,
+                                child: CustomShimmer(
+                                  height: 40,
+                                  width: 60,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       )
                     : Container(
                         padding: const EdgeInsets.only(left: 25),
@@ -181,12 +200,33 @@ class _HomeTabState extends State<HomeTab> {
               },
             ),
 
+            Container(
+              height: 10,
+            ),
+
             // Grid
             GetBuilder<HomeController>(
               builder: (controller) {
                 return controller.isProductFetching
-                    ? const Center(
-                        child: CircularProgressIndicator(),
+                    ? Expanded(
+                        child: GridView.count(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          physics: const BouncingScrollPhysics(),
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 9 / 11.5,
+                          crossAxisCount: 2,
+                          children: List.generate(
+                            8,
+                            (index) {
+                              return CustomShimmer(
+                                height: double.infinity,
+                                width: double.infinity,
+                                borderRadius: BorderRadius.circular(20),
+                              );
+                            },
+                          ),
+                        ),
                       )
                     : Expanded(
                         child: Visibility(
@@ -208,10 +248,11 @@ class _HomeTabState extends State<HomeTab> {
                             physics: const BouncingScrollPhysics(),
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10,
-                                    childAspectRatio: 9 / 11.5),
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: 9 / 11.5,
+                            ),
                             itemCount: controller.products.length,
                             itemBuilder: (_, index) {
                               bool isLastItem =
